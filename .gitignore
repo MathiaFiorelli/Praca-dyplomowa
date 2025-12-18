@@ -1,0 +1,6 @@
+# Ignore everything except Python and Jupyter files
+*
+!*.py
+!*.ipynb
+!.gitignore
+!*/
