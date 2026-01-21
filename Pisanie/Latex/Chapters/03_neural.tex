@@ -18,7 +18,7 @@ Jest to pojedynczy neuron wraz z wagami na wejściu, w tym z wagą zerową (wyra
 Aby perceptron poprawnie klasyfikował, klasy muszą być liniowo rozdzielne. Co w przypadku zagadnienia dwuwymiarowego oznacza dwa obszary które można rozdzielić prostą.
 Roseblatt sformułował twierdzenie zbieżności perceptronu
 
-\begin{tcolorbox}[title=Algorytm zbieżności perceptronu,colback=blue!5!white,colframe=blue!75!black]
+\begin{tcolorbox}[title=Algorytm zbieżności perceptronu,colback=blue!5!white,colframe=blue!75!black,breakable]
 W oparciu o twierdzenie zbieżności perceptronu można sformułować następujący algorytm uczenia się perceptronu: \cite{haykin2009neural}\\
 
 \textbf{Zmienne:}\\
@@ -139,3 +139,51 @@ proponują następującą klasyfikację funkcji aktywacji:
 
 \subsection{Jaką rolę pełnią dodatkowe warstwy w sieci neuronowej?}
 
+Warstwa w sieci neuronowej to zbiór neuronów, które przetwarzają ten sam wektor sygnałów wejściowych (pochodzący z poprzedniej warstwy), lecz z użyciem różnych wag synaptycznych i wartości progowych. 
+Dla sieci neuronowych o jednym neuronie w każdej warstwie obserwuje się, że dodawanie kolejnych warstw nie zwiększa zdolności aproksymacyjnych, a w granicznym przypadku prowadzi do degeneracji wyjścia do funkcji stałej.
+Zarówno sieci płytkie (takie o jednej warstwie ukrytej) jak i głębokie mogą być uniwersalnymi aproksymatorami badanej funkcji, o ile mają odpowiednią szerokość (ilość neuronów w warstwie), w przeciwieństwie do sieci bez warstw ukrytych lub do sieci których szerokość (maksymalna ilość neuronów w każdej z warstw) wynosi 1.\cite{tutorial_nn_activation}
+
+Jedna ukryta warstwa o odpowiedniej ilości neuronów jest w stanie przybliżyć większość funkcji, jednakże zwiększenie ilości warstw o rozsądnej szerokości znacząco ułatwia to zadanie. \cite{islp}
+
+Sieci o pojedynczych warstwach mają ograniczoną moc obliczeniową. Ograniczenie to jest możliwe do obejścia dodając głębokość lub szerokość.
+Dodawanie warstw ukrytych wiąże się z trudnością analizy teoretycznej modelu oraz wizualizację procesu uczenia.
+Istnieją zasadniczo trzy rodzaje warstw:
+\begin{enumerate}
+    \item Warstwa wejściowa, której zadaniem jest przekazanie wartości argumentów aproksymowanej funkcji do warstwy ukrytej. Nie wykonują obliczeń nieliniowych oraz nie mają wag uczonych w klasycznym sensie.
+    \item Warstwa ukryta, która nazwę swoją zawdzięcza faktowi, że obliczenia nie są widoczne z perspektywy wejścia czy wyjścia. 
+    \item Warstwa wyjściowa, ostatnia warstwa sieci, która przyjmuje jako argument wartość sygnału od ostatniej warstwy ukrytej i przekształca na wynik końcowy sieci.
+\end{enumerate}
+
+Neurony warstwy ukrytej działają jak detektory cech i odgrywają integralną rolę w modelach MPL (Multi Layer Perceptron). Z definicji warstwy wejściowej wynika, że neurony w warstwie ukrytej nie przyjmują wartości wejściowych z danych które mają zostać przybliżone. W trakcie uczenia warstwy ukryte „odkrywają” cechy charakteryzujące dane treningowe. Dzieje się to w wyniku nieliniowego przekształcenia na danych wejściowych do przestrzeni cech, dzięki której łatwiej zidentyfikować klasy czy prawidłowości, niż opierając się wyłącznie na analizie samych danych wejściowych. Obecność przestrzeni cech przede wszystkim różni MLP od Perceptronu Rosenblatta.
+
+\begin{tcolorbox}[title=Algorytm wstecznej propagacji błędu (ang. Backpropagation),
+    colback=blue!5!white,colframe=blue!75!black,
+    breakable]
+    
+Przy założeniu że użyta zostaje funkcja aktywacji sigmoidalna, algorytm wstecznej propagacji błędu (ang. Backpropagation) można opisać następującymi krokami:\cite{haykin2009neural}
+    \begin{enumerate}
+        \item \textbf{Inicjalizacja} Przy założeniu, że nie ma żadnych informacji dostępnych zakłada się wagi synaptyczne oraz wartości graniczne z rozkładu jednostajnego, którego średnia równa się zero. Wariancję rozkładu dobiera się w taki sposób by dla odchylenie standardowe lokalnego indukowanego pola znajdowało się pomiędzy częścią liniową a wysyconą funkcji sigmoidalnej.
+        \item \textbf{Przekazanie danych wejściowych} W epoce $n$ aplikowany jest przykład treningowy $\mathbf{x(n)}$ na warstwę wejściową, a wartość oczekiwana $\mathbf{d(n)}$ jest przechowana do późniejszego porównania z warstwą wyjściową.
+        \item \textbf{Obliczenia „w przód” (ang. \textit{forward computation})} Obliczone zostają indukowane lokalne pola dla każdej z warstw podając wyjście jednej warstwy jako wejście kolejnej. Wartość indukowanego pola dla neuronu j-tego z warstwy l-tej wyznacza się ze wzoru: 
+        \[v_j^l(n)=\sum_i{w_{ji}^l(n)y_i^{l-1}(n)}\],
+        gdzie $w_{ji}^l(n)$ to waga synaptyczna łącząca neuron i-ty z warstwy (l-1)-tej z neuronem j-tym z warstwy l-tej, a $y_i^{l-1}(n)$ to wyjście neuronu i-tego z warstwy (l-1)-tej.
+        Celem tego kroku jest wyznaczenie błędu:
+        \[e_j(n) = d_j(n) - y_j^L(n)\],
+        gdzie $y_j^L(n)$ to wyjście j-tego neuronu z warstwy wyjściowej L-tej.
+        \item \textbf{Obliczenia wstecz (ang. \textit{backward computation})}
+        Obliczone zostają lokalne gradienty: 
+        \[
+            \delta_j^l(n) =
+            \begin{cases}
+            e_j^L(n)\,\phi'_j(v_j^l(n)) & \text{ dla neuronu } j \text{ w warstwie wyjściowej } L, \\
+            \phi'_j(v_j^l(n))\sum_k {\delta_k^{l+1}(n)w_{kj}^{l+1}(n)} & \text{ dla neuronu } j \text{ w warstwie ukrytej } l,
+            \end{cases}
+        \]
+        Gdzie $\phi'_j(\cdot)$ to pochodna funkcji aktywacji neuronu j-tego.
+        po wyznaczeniu lokalnych gradientów wykorzystuje się je do aktualizacji wag:
+        \[w_{ji}^l(n+1)=w_{ji}^l(n) +\alpha\left[\Delta w_{ji}^l(n-1) \right] +\eta \delta_j^l(n)y_i^{l-1}(n) \]
+        Gdzie $\eta$ to współczynnik uczenia, a $\alpha$ to współczynnik momentu, a $\Delta w_{ji}^l(n) = \eta\delta_j(n)y_i(n)$ to zmiana wagi.
+        \item \textbf{Iteracja}Należy powtarzać kroki 3 oraz 4 wprowadzając kolejne przykłady, dopóki kryterium zatrzymania nie zostanie osiągnięty
+    \end{enumerate}
+
+\end{tcolorbox}
