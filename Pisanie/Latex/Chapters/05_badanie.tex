@@ -1,0 +1,299 @@
+\newpage
+\section{Badanie}
+\subsection{Opis Danych} \label{opis_danych}
+Dane źródłowe pochodzą ze zbioru opublikowanego na konkursie podczas konferencji International Conference on Prognostics and Health Management (PHM08). Celem tego konkursu było wykorzystanie danych ze wskaźników do oszacowania pozostałych ilości cykli dla danej floty silników.  Dane te nie zostały zebrane poprzez odczyt wskaźników i fizycznie zamontowanych urządzeń pomiarowych, lecz w wyniku symulacji narzędzia C-MAPSS (Commercial Modular Aero-Propulsion System Simulation). C-MAPSS pozwala na symulację pracy silnika turbowentylatorowego klasy 90.000 lbf ciągu (mniej więcej takie jakie napędzają Boein-777). Symulacja deterioracji silnika została oparta o dane wsadowe do symulacji narzędzia poprzez zmiany sprawności, przepływów itp. przez autorów.
+W wyniku opisanej symulacji powstały dane zebrane w formie tabelarycznej w której każdy wiersz zawiera wartości czujników i innych ustawień dla danego silnika w pewnej chwili, będącej liczbą odpowiadającą ilości przelatanych cykli (zazwyczaj cykl pracy silnika to: start, przelot, lądowanie).
+Każdy wiersz zawiera poniżej zestawione kolumny:
+
+\begin{center}
+\begin{longtable}{|p{1cm}||p{7cm}|p{2.2cm}|p{2cm}|}
+\caption{Zestawienie parametrów silnika}
+\label{table:1} \\
+\hline
+\textbf{L.p.} & \textbf{Nazwa} & \textbf{Oznaczenie} & \textbf{Jednostka} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{L.p.} & \textbf{Nazwa} & \textbf{Oznaczenie} & \textbf{Jednostka} \\
+\hline
+\endhead
+
+1  & Temperatura całkowita na wlocie wentylatora & T2   & °R \\
+2  & Temperatura całkowita na wylocie Sprężarki Niskiego Ciśnienia & T24  & °R \\
+3  & Temperatura całkowita na wylocie Sprężarki Wysokiego Ciśnienia & T30  & °R \\
+4  & Temperatura całkowita na wylocie Turbiny Niskiego Ciśnienia & T50  & °R \\
+5  & Ciśnienie na wlocie wentylatora & P2   & psia \\
+6  & Ciśnienie całkowite w kanale zewnętrznym & P15  & psia \\
+7  & Ciśnienie całkowite na wylocie Sprężarki Wysokiego Ciśnienia & P30  & psia \\
+8  & Prędkość obrotowa wentylatora & Nf   & obr/min \\
+9  & Prędkość obrotowa wytwornicy spalin & Nc   & obr/min \\
+10 & Spręż silnika & epr  & -- \\
+11 & Ciśnienie statyczne na wylocie Sprężarki Wysokiego Ciśnienia & Ps30 & psia \\
+12 & Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia & phi & pps/psi \\
+13 & Poprawiona prędkość obrotowa wentylatora & NRf  & obr/min \\
+14 & Poprawiona prędkość obrotowa wytwornicy spalin & NRc  & obr/min \\
+15 & Stosunek dwuprzepływowości & BPR  & -- \\
+16 & Stosunek wydatku paliwa do powietrza & farB & -- \\
+17 & Entalpia wydatku masowego & htBleed & -- \\
+18 & Wymagana prędkość obrotowa wentylatora & $Nf_{dmd}$ & obr/min \\
+19 & Wymagana poprawiona prędkość obrotowa wentylatora & $PCNfR_{dmd}$ & obr/min \\
+20 & Wydatek masowy chłodzenia Turbiny Wysokiego Ciśnienia & W31  & lbm/s \\
+21 & Wydatek masowy chłodzenia Turbiny Niskiego Ciśnienia & W32  & lbm/s \\
+\hline
+\end{longtable}
+\end{center}
+
+\subsection{Wizualizacja danych (Exploratory Data Analysis)} \label{section_eda}
+Przeprowadzono kompleksową analizę danych począwszy od analizy rozkładu maksymalnego przeżycia dla każdego z silników. Rysunek~\ref{fig:hist_max_life} wskazuje na niesymetryczny rozkład maksymalnej ilości przelatanych cykli. Histogram gromadzi się głównie wokół wartości 200 cykli, chociaż wyjątkowo trwałe silniki o maksymalnym życiu większym niż 350 również znajdują się w zbiorze danych.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output//Histograms/Max Life_histogram.png}
+    \caption{Histogram Rozkładu Maksymalnej ilości cykli}
+    \label{fig:hist_max_life}
+\end{figure}
+Ze zbioru danych usunięto następujące kolumny, które były w całości puste, lub miały tylko jedną wartość.: Operational setting 3, T2, P2, epr, farB, $Nf_{dmd}$, $PCNfR_{dmd}$
+Elementy te są stałe ze względu na naturę symulacji: temperatura i ciśnienie na wlocie są stałe ponieważ symulowane są przeloty w atmosferze ISA (standardowe wartości parametrów otoczenia). Stosunek ciśnień (spręż) silnika jest również stały, ponieważ zmiany ciśnienia na wylocie turbiny są relatywnie małe. To samo się dotyczy wymaganych prędkości wentylatora oraz wydatku paliwa, ponieważ nie ma zmian obciążeń, nie ma potrzeby zian tych wartości.
+
+Obliczono RUL (ang. Remaining Useful Life), czyli pozostałą liczbę cykli do końca życia silnika i wykonano analizę korelacji Pearsona, otrzymując Rysunek~\ref{fig:pearson}.
+W oparciu o macierz korelacji przeprowadzono analizę grup cech, tzn. które cechy są ze sobą najbardziej skorelowane. Wykorzystane to zostanie dalej aby zmniejszyć ilość analizowanych cech, zmniejszając tym samym czas potrzebny do uczenia sieci.
+Przy progu odcięcia odległości korelacji równym 0.25 otrzymano następujące grupy:
+
+\begin{table}[H]
+\centering
+\caption{Wynik klasteryzacji}
+\label{table_klastry}
+\begin{tabular}{llp{8cm}}
+\toprule
+\textbf{Grupa} & \textbf{Symbol} & \textbf{Opis} \\
+\midrule
+\multirow[t]{5}{*}{1} & P30 & Ciśnienie całkowite na wylocie Sprężarki Wysokiego Ciśnienia \\
+ & RUL & ang. Remaining Useful Life - ilość pozostałych cykli do końca resursu \\
+ & W31 & Wydatek masowy chłodzenia Turbiny Wysokiego Ciśnienia \\
+ & W32 & Wydatek masowy chłodzenia Turbiny Niskiego Ciśnienia \\
+ & phi & Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia \\
+\midrule
+2 & Operational setting 1 &  \\
+\midrule
+3 & Operational setting 2 &  \\
+\midrule
+\multirow[t]{8}{*}{4} & BPR & Stosunek dwuprzepływowości \\
+ & NRf & Poprawiona prędkość obrotowa wentylatora \\
+ & Nf & Prędkość obrotowa wentylatora \\
+ & Ps30 & Ciśnienie statyczne na wylocie Sprężarki Wysokiego Ciśnienia \\
+ & T24 & Temperatura całkowita na wylocie Sprężarki Niskiego Ciśnienia \\
+ & T30 & Temperatura całkowita na wylocie Sprężarki Wysokiego Ciśnienia \\
+ & T50 & Temperatura całkowita na wylocie Turbiny Niskiego Ciśnienia \\
+ & htBleed & Entalpia wydatku masowego \\
+\midrule
+5 & P15 & Ciśnienie całkowite w kanale zewnętrznym \\
+\midrule
+\multirow[t]{2}{*}{6} & NRc & Poprawiona prędkość obrotowa wytwornicy spalin \\
+ & Nc & Prędkość obrotowa wytwornicy spalin \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Pearson Correlation Heatmap.png}
+    \caption{Mapa cieplna korelacji Pearsona cech zbioru danych}
+    \label{fig:pearson}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Output/Dendrogram.png} 
+    \label{fig:dendrogram}
+    \caption{Analiza klasteryzacji - dendrogram}
+    \label{fig:cluster}
+\end{figure}
+
+W oparciu o macierz korelacji wykonano wykresy czterech najbardziej skorelowanych cech z RUL w funkcji cykli. Kolory punktów odpowiadają ilości pozostałych cykli do przeżycia: im kolor ciemniejszy tym mniej cykli. 
+
+W przypadku Ps30 (ciśnienie statyczne na wylocie turbiny wysokiego ciśnienia) ciśnienie na początku życia silników wynosi od około 47 do 47,75 psia i rośnie około 2\% do 48 - 48,5 psia. Wzrost ciśnienia statycznego wiąże się ze spowolnieniem przepływu powietrza w sprężarce co jest spójne z narracją postępującej eksploatacji i deterioracji komponentów silnika.
+
+Również T50 (temperatura całkowita na wylocie turbiny niskiego ciśnienia) rośnie wraz cyklami. Wraz ze spadkiem prędkości powietrza w sprężarkach, powietrze które jest wykorzystywane do chłodzenia komory spalania, w mniej skuteczny sposób odbiera ciepło. W innych modelach przewidywane jest, że temperatura będzie rosnąć w wyniku deterioracji turbiny, co przekłada się na gorsze odebranie energii, jednak w przypadku tego zestawu danych modelowany jest jedynie spadek sprawności sprężarki wysokiego ciśnienia. Zmiany temperatur wahają się od 1390 - 1420 do 1420 - 1440 (\~2\%)
+
+Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia w funkcji przelatanych cykli jest funkcją malejącą, ponieważ wydatek paliwa jest stały w ciśnienie statyczne rośnie. 
+
+Ciśnienie całkowite za sprężarką wysokiego ciśnienia maleje, ponieważ straty rosną w funkcji cykli.
+
+Warte uwagi jest zgodnie z przewidywaniami RUL w funkcji ilości przelatanych cykli jest funkcją malejącą, jednakże nie jest jednoznaczne dla jakich wartości cech silnik kończy życie. Na rysunku~\ref{fig:scatter} można wyróżnić obszary dla których w przypadku jednych silników pozostaje jeszcze wiele cykli do przelatania podczas gdy dla innych wiąże się z koniecznym remontem. Dodatkowo to podkreśla rysunek~\ref{fig:rul_vs_cycles}, gdzie RUL w funkcji cykli jest funkcją liniową malejącą o tym samym współczynniku nachylenia lecz różnym współczynniku wolnym.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Scatterplots/RUL_vs_P30_scatterplot.png}
+    \caption{Wykresy punktowe dla 4 najbardziej skorelowanych cech z RUL}
+    \label{fig:scatter}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Scatterplots/RUL_vs_cycles_scatterplot.png}
+    \caption{Wykres RUL w funkcji przelatanych cykli}
+    \label{fig:rul_vs_cycles}
+\end{figure}
+
+
+
+\subsection{Uczenie maszynowe w kontekście danych silnikowych}
+Artykuł \cite{rnn_rul} opisuje predykcję żywotności silników turbowentylatorowych poprzez wykorzystanie własnościowego oprogramowania trenującego opartego na wielowarstwowym perceptronie (Multi-Layer Perceptron Neural Network). Zbiór danych jest ten sam co opisany w \ref{opis_danych}. Autor udowodnił sensowność badania poprzez klasyfikację silników na zdrowe/zużyte przy założeniu że pierwsze 30 cykli każdego silnika przedstawia dane typowe dla silników niewyeksploatowanych. Wspomniane oprogramowanie wykorzystuje Rozszerzony Filtr Kalmana (Extended Kalman Filter Training Method).Porównane zostały dwie architektury trójwarstwowa i dwuwarstwowa: pierwsza wykazała większą prędkość uczenia i dokładniejsze wyniki. Trening został przeprowadzony na systemie operacyjnym Windows XP, z procesorem Intel o taktowaniu 2GHz i osiągnięto 99,1\% dokładności klasyfikacji.\\
+Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla rodziny silników turbowentylatorowych. Zbiór danych pochodzi z rzeczywistych pomiarów istniejących maszyn. Zaproponowane zostały trzy rodzaje treningu w odróżnieniu od klasycznego podejścia podziału na zbiór treningowy i testowy. Wykorzystany model estymuje wartość temperatury gazu za turbiną podczas startu samolotu opierając się na założeniu że jest to najlepszy wskaźnik stanu silnika z racji na największe zapotrzebowanie na moc, duże wytężenie termiczne i ciśnieniowe modułu turbiny. Podział został wykonany w oparciu o informacje dotyczące wystąpienia wizyt w warsztatach. Autorzy zauważyli, że naprawa silników wiąże się z poprawą wartości predykatorów żywotności w związku z tym trzy rodzaje podziału zostały zaproponowane. Zbiór danych jest dzielony na tyle na N+1 segmentów, gdzie N to liczba wizyt w warsztatach.
+\begin{table}[H]
+\centering
+\caption{Metody podziału zbioru danych ze względu na wizyty w warsztacie}
+\begin{tabular}{p{2.5cm} p{3cm} p{3cm} p{7cm}}
+\hline
+\textbf{Metoda} & \textbf{Zbiór danych treningowych} & \textbf{Zbiór danych testowych} & \textbf{Hipoteza} \\
+\hline
+I (one-to-many) 
+& Tylko segment 1 
+& Tylko segment 2 
+& Segment 1 odpowiada sytuacji w której nowy silnik zużywa się. Jest to najbardziej reprezentacyjna próba degradacji silnika. \\
+\hline
+II (many-to-many) 
+& segment [1,N] 
+& segment N+1
+& Obraz pełnej sekwencji pogarszania się stanu dostarczy najwięcej informacji na ten temat zwiększając dokładność predykcji.\\
+\hline
+III (one-to-one) 
+& segment N--1 
+& segment N 
+& Tylko przedostatni segment obrazuje wiernie charakterystyki deterioracji.\\
+\hline
+\end{tabular}
+\end{table}
+
+Dodatkowo użyto dopasowanie wielomianowe (polynominal fitting) w celu odróżnienia sygnałów od trendów. Wykorzystano pierwszy segment (tj. od nowości do pierwszego remontu) każdego silnika do treningu, a do testów wykorzystano pozostały zbiór. Ze względu na trudność związaną z procesowaniem długim zbiorów czasowych przez klasyczne rekurencyjne sieci neuronowe (RNN) wykorzystano sieć LSTM (ang. Long Short-Term Memory - długa pamięć krótkotrwała). RNN posiada sieć porównywalną do łańcucha, LSTM natomiast posiada cztery sigmoidalne warstwy, które decydują o tym czy informacja zostanie zapomniana, przechowana czy podana dalej. 
+Do oceny predykcji modeli wykorzystano błąd średniokwadratowy
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    \mathrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{N} \lvert \hat{y}_i - y_i \rvert^{2}}{N}}
+    \label{eq:placeholder_label}
+\end{equation}
+gdzie $\hat{y}$ to wartość przewidywana a $\mathrm{y}$ to wartość rzeczywista, N to liczba niebrakujących danych. RMSE został obliczony dla każdego silnika, a wyznaczona mediana i średnia arytmetyczna zostały wykorzystane do porównania modeli.
+We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso, ridge, en, huber, lassol, pa, sgd), których średni RMSE waha się między 3.02 – 3.94 w zależności od użytej metody. Na drugim miejscu plasują się modele nieliniowe (knn, cart, et, svmr, ada, bag, rf, gbm), których średni RMSE wynosi 3.17 – 4.07, a dla LSTM: 3.88 – 4.14. Średnie wartości RSTM zależą od użytej metody podziału na zbiór treningowy i testowy.
+W oparciu o model LSTM porównano również jakości predykcji dla różnych rodzajów podziałów dla trzech rodzin silników. Dwa na trzy rodziny najlepsze wyniki daje klasyczny podział Train-Test Split, natomiast w dla jednej rodziny podejście nr 1 zwyciężyło.
+
+\subsection{Część eksperymentalna}
+
+\subsubsection{Preprocessing danych}
+W ramach preprocessingu wykonano analizę korelacji i pogrupowano cechy zgodnie z opisem w \ref{section_eda}. Następnie wybrano 6 cech najbardziej skorelowanych z RUL (nie wliczając tej cechy) oraz przeprowadzono transformację Min - Max do zakresu [-1,1] na podstawie wzoru:
+\[
+x' = 2 \cdot \frac{x - x_{\min}}{x_{\max} - x_{\min}} - 1,
+\]
+gdzie $x$ oznacza wartość oryginalną cechy, natomiast $x_{\min}$ i $x_{\max}$ są odpowiednio jej wartością minimalną i maksymalną.
+
+\subsubsection{Opis modeli}
+Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o budowie sieci neuronowych oraz jeden wykorzystujący schematy kwantowe.
+
+%Tablica podsumująca architektury neuronowych autoenkoderów
+\begin{table}[H]
+\centering
+\caption{Architektura liniowego autoenkodera}
+\label{tab:autoencoder_architecture}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Model} & \textbf{Blok} & \textbf{Warstwa} & \textbf{Wymiary} & \textbf{Aktywacja} \\
+\midrule
+\multirow{6}{*}{Autoencoder 1}
+ & \multirow{3}{*}{Enkoder}
+ & Linear 1 & $6 \rightarrow 4$ & ReLU \\
+ &  & Linear 2 & $4 \rightarrow 3$ & ReLU \\
+ &  & Linear 3 & $3 \rightarrow 2$ & brak \\
+\cmidrule(lr){2-5}
+ & \multirow{3}{*}{Dekoder}
+ & Linear 4 & $2 \rightarrow 3$ & ReLU \\
+ &  & Linear 5 & $3 \rightarrow 4$ & ReLU \\
+ &  & Linear 6 & $4 \rightarrow 6$ & Tanh \\
+
+ \midrule
+\multirow{4}{*}{Autoencoder 2}
+ & \multirow{2}{*}{Enkoder}
+ & Linear 1 & $6 \rightarrow 2$ & ReLU \\
+ &  & Linear 2 & $4 \rightarrow 1$ & brak \\
+ 
+\cmidrule(lr){2-5}
+ & \multirow{3}{*}{Dekoder}
+ & Linear 4 & $1 \rightarrow 2$ & ReLU \\
+ &  & Linear 5 & $2 \rightarrow 6$ & Tanh \\
+
+ \midrule
+\multirow{10}{*}{Autoencoder 3}
+ & \multirow{5}{*}{Enkoder}
+ & Linear 1 & $6 \rightarrow 5$ & ReLU \\
+ &  & Linear 2 & $5 \rightarrow 4$ & ReLU \\
+ &  & Linear 3 & $4 \rightarrow 3$ & ReLU \\
+ &  & Linear 4 & $3 \rightarrow 2$ & ReLU \\
+ &  & Linear 5 & $2 \rightarrow 1$ & brak \\
+\cmidrule(lr){2-5}
+ & \multirow{5}{*}{Dekoder}
+ & Linear 6 & $1 \rightarrow 2$ & ReLU \\
+ &  & Linear 7 & $2 \rightarrow 3$ & ReLU \\
+ &  & Linear 8 & $3 \rightarrow 4$ & ReLU \\
+ &  & Linear 9 & $4 \rightarrow 5$ & ReLU \\
+ &  & Linear 10 & $5 \rightarrow 6$ & Tanh \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{quantikz}
+\lstick{$\ket{0}$} & \gate{R_y(x_1)} & \ctrl{1} & \gate{R_y(\theta_1)} & \meter{} \\
+\lstick{$\ket{0}$} & \gate{R_y(x_2)} & \targ{} & \gate{R_y(\theta_2)} & \meter{}
+\end{quantikz}
+
+\input{Output/Model_Analysis/reconstruction_full_summary}
+
+\input{Output/Model_Analysis/reconstruction_simple_summary}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Loss_Comparison.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:neural_loss}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Time_Comparison.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:neural_times}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Decoder_QNode.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:quantum_decoder_graph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Latent_State_QNode.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:quantum_latent_graph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Trash_Zero_QNode.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:quantum_trash_graph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Training_Loss_Comparison.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:quantum_loss_plot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_vs_AE1_Histograms.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:quantum_vs_ae1}
+\end{figure}

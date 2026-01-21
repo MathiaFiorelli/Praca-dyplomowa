@@ -1,0 +1,81 @@
+%!TEX root = main.tex
+
+\documentclass[12pt,a4paper]{article}
+
+% -------------------- POLISH SETTINGS --------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+
+% -------------------- GEOMETRY --------------------
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+% -------------------- FONT --------------------
+\usepackage{newtxtext,newtxmath} % Times New Roman-like font
+
+% -------------------- PDF IMPORT --------------------
+\usepackage{pdfpages} % allows importing PDF pages
+
+% -------------------- OTHER PACKAGES --------------------
+\usepackage{setspace}
+\onehalfspacing  % line spacing 1.5
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{quantikz}
+\numberwithin{equation}{subsection}
+\usepackage[many]{tcolorbox}    	% for COLORED BOXES (tikz and xcolor included)
+\usepackage{amsmath}
+
+
+
+
+
+\begin{document}
+
+% ----------- TITLE PAGE FROM WORD AS PDF --------------
+% Export your Word title page to PDF (strona_tytulowa.pdf) 
+% and put it in the same folder as this .tex file.
+\includepdf{strona_tytulowa.pdf}
+
+\tableofcontents
+\newpage
+
+\input{Chapters/01_wstep.tex}
+\input{Chapters/02_literatura.tex}
+\input{Chapters/05_badanie.tex}
+\input{Chapters/03_neural.tex}
+\input{Chapters/04_quantum.tex}
+\input{Chapters/06_podsumowanie.tex}
+
+\newpage
+\addcontentsline{toc}{section}{Bibliografia}
+
+\renewcommand{\refname}{Bibliografia} % zmienia tytuł w generowanej bibliografii
+
+\bibliographystyle{unsrt}
+\bibliography{bibliografia}
+\newpage
+
+\addcontentsline{toc}{section}{Spis rysunków}
+\listoffigures
+
+\newpage
+\addcontentsline{toc}{section}{Spis tabel}
+\listoftables
+
+
+
+
+\end{document}

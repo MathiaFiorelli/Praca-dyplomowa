@@ -1,0 +1,141 @@
+\newpage
+\section{Sieci Neuronowe}
+Za początek konceptu sztucznych sieci neuronowych można przyjąć 1943 rok, w którym to McCulloch i Pitts opierając się na działaniu komórki mózgowej - neuronie opisali model matematyczny który stał się podwalinami dzisiejszej sztucznej inteligencji (Logical Calculus of the Ideas Immanent in Neuron Activity, „The Bulletin of Mathematical Biophysics" 1943, nr 5 (4), s. 115 - 133). Komórka (dendryt) ta została przybliżona do matematycznego modelu będącym bramką logiczną. Dendryt integruje docierające do niego sygnały w swoim wnętrzu i generuje dalszy sygnał, jeżeli energia przychodzącego sygnału przekroczy graniczną wartość. \cite{raschka_python}
+Neuron jest elementem procesującym informacje posiadający następujące cechy:\cite{haykin2009neural}
+
+\begin{itemize}
+    \item Neuron odbiera sygnały (informacje), tak jak jego biologiczny odpowiednik posiada synapsy, które charakteryzują wagi, które skalują odbierany sygnał. Wagi te w przypadku sztucznych neuronów mogą przybierać ujemne wagi.
+    \item Neuron przetwarza odebrany sygnał wykorzystując funkcję sumującą, która dokonuje liniowej kombinacji wag i sygnałów.
+    \item Neuron wykorzystuje funkcję aktywacji do wyznaczenia ostatecznej wartości przekazywanego dalej sygnału. Sygnał również jest skalowany do odpowiednich zakresów.
+\end{itemize} 
+    
+
+Sieci neuronowe to zbiór neuronów uporządkowanych w warstwach. Każda warstwa przetwarza dane i przekazuje je do kolejnej warstwy. Pierwsza warstwa to warstwa wejściowa, która posiada jedno wejście i przekazuje sygnał $y = \phi(1\cdot x+0) = x$, ostatnia to warstwa wyjściowa, która może mieć więcej niż jedno wejście i wyjście, a pomiędzy nimi znajdują się warstwy ukryte. \cite{tutorial_nn_activation}
+
+\subsection{Co to jest perceptron?}
+Szczególnym typem sztucznego neuronu jest perceptron Rosenblatta, powszechnie nazywany perceptronem, którego algorytm jest powszechnie używany po dziś dzień. Innymi słowy jest to matematyczny model neuronu opisanego przez McCullocha i Pitts. Rosenblat z wykształcenia psycholog jako pierwszy opisał algorytm działania neuronu w 1958 roku. Perceptron jest najprostszą wersją sieci neuronowej, którego zadaniem jest klasyfikacja wzorców będących liniowo rozdzielnymi (ang. Linearly separable), tzn. wzorce które leżą po przeciwnych stronach hiperpłaszczyzny. 
+Jest to pojedynczy neuron wraz z wagami na wejściu, w tym z wagą zerową (wyrazem wolnym). 
+Aby perceptron poprawnie klasyfikował, klasy muszą być liniowo rozdzielne. Co w przypadku zagadnienia dwuwymiarowego oznacza dwa obszary które można rozdzielić prostą.
+Roseblatt sformułował twierdzenie zbieżności perceptronu
+
+\begin{tcolorbox}[title=Algorytm zbieżności perceptronu,colback=blue!5!white,colframe=blue!75!black]
+W oparciu o twierdzenie zbieżności perceptronu można sformułować następujący algorytm uczenia się perceptronu: \cite{haykin2009neural}\\
+
+\textbf{Zmienne:}\\
+$\mathbf{x}(n) = [+1,x_1(n),x_2(n),...,x_m(n)]^T$ -- wektor wejściowy o wymiarach (m+1) * 1, \\
+$\mathbf{w}(n) = [b,w_1(n),w_2(n),...,w_m(n)]^T$ -- wektor wag o wymiarach (m+1) * 1, \\
+$b$ -- wyraz wolny (bias), \\
+$n$ -- krok czasowy, \\
+$y(n)$ -- rzeczywista skwantowana odpowiedź, \\
+$d(n)$ -- oczekiwana skwantowana odpowiedź, \\
+$\eta$ -- współczynnik uczenia, stała dodatnia mniejsza od jedności. \\
+
+\textbf{Algorytm:}
+
+\begin{enumerate}
+    \item \textbf{Inicjalizacja}  
+    Niech $\mathbf{w}(0) = \mathbf{0}$.
+
+    \item \textbf{Aktywacja}  
+    Dla kolejnych kroków $n = 1,2,...$:\\
+    Dla kroku czasowego n następuje aktywacja perceptronu poprzez aplikację wektora wejściowego $\mathbf{x}(n)$ oraz oczekiwanej odpowiedzi $d(n)$.
+
+    \item \textbf{Obliczenie odpowiedzi}  
+    Odpowiedź perceptronu wyznacza się ze wzoru:
+    \[
+    y(n) = \operatorname{sgn}\!\left[\mathbf{w}^T(n)\mathbf{x}(n)\right],
+    \]
+    gdzie $\operatorname{sgn}(\cdot)$ to funkcja signum.
+
+    \item \textbf{Adaptacja wektora wag}  
+    Aktualizacja wektora wag odbywa się według wzoru:
+    \[
+    \mathbf{w}(n+1) = \mathbf{w}(n) + \eta\big[d(n) - y(n)\big]\mathbf{x}(n),
+    \]
+    gdzie
+    \[
+    d(n) =
+    \begin{cases}
+        +1, & \text{jeżeli } \mathbf{x}(n) \text{ należy do klasy } \mathcal{C}_1, \\
+        -1, & \text{jeżeli } \mathbf{x}(n) \text{ należy do klasy } \mathcal{C}_2
+    \end{cases}
+    \]
+
+    \item \textbf{Kontynuacja}  
+    Zwiększenie kroku czasowego $n$ o 1 i powrót do kroku nr 2.
+\end{enumerate}
+
+\end{tcolorbox}
+
+\subsection{Czym jest funkcja aktywacji i do czego służy?}
+Funkcja aktywacji definiuje wartość sygnału wyjścia neuronu w funkcji liniowej kombinacji wejść i wag.
+
+Funkcja aktywacji jest matematycznym modelem odwzorowującym sygnał wejściowy na sygnał wyjściowy neuronu. W przypadku perceptronu funkcją aktywacji jest funkcja skoku jednostkowego (ang. step function) lub funkcja signum. Funkcje aktywacji można podzielić na dwie kategorie: liniowe i nieliniowe. Funkcje liniowe są rzadko stosowane w praktyce, ponieważ sieci neuronowe z liniowymi funkcjami aktywacji mają ograniczoną zdolność do modelowania złożonych zależności. Nieliniowe funkcje aktywacji, takie jak sigmoidalna, ReLU (Rectified Linear Unit) czy tanh (hiperboliczna tangens), pozwalają sieciom neuronowym na modelowanie skomplikowanych wzorców i relacji w danych. Wybór odpowiedniej funkcji aktywacji ma kluczowe znaczenie dla efektywności uczenia się i ogólnej wydajności sieci neuronowej.\\
+
+Nieliniowość funkcji aktywacji sprawia, że sieć neuronowa sama staje się nieliniowym narzędziem aproksymacyjnym. W przypadku użycia liniowej funkcji aktywacji model sieci: 
+\[f(x)= \beta_0 +\sum_{k=1}^{K}{\beta_k g(w_{k0}+\sum_{j=1}^{p}{w_{kj}X_j})}\],
+gdzie: 
+\begin{itemize}
+    \item $g(\cdot)$ - funkcja aktywacji,
+    \item $X_j$ - wejścia,
+    \item $w_{kj}$ - wagi,
+    \item $\beta_k$ - współczynniki liniowe,
+    \item $K$ - liczba neuronów w warstwie ukrytej,
+    \item $p$ - liczba wejść,
+\end{itemize}
+redukuje się do postaci liniowej względem wejść $X_j$. Oznacza to, że sieć neuronowa z liniową funkcją aktywacji nie jest w stanie modelować nieliniowych zależności między wejściami a wyjściami.\cite{islp}
+
+Autorzy \cite{fa_survey} 
+proponują następującą klasyfikację funkcji aktywacji:
+\begin{description}
+    \item [Funkcje aktywacji o ustalonym kształcie.] To zbiór funkcji aktywacji, które mają z góry określony kształt i nie zmieniają się podczas procesu uczenia. Zbiór ten dodatkowo dzielony na dwa podzbiory:
+        \begin{itemize}
+            \item Funkcje aktywacji klasyczne. Powszechnie wykorzystywane w jednowarstwowych sieciach neuronowych. Nadają się do każdego zadanie przybliżania funkcji, pod warunkiem ciągłości i monotoniczności. W głębokich sieciach neuronowych ich implementacja jest niezalecana przez zjawisko zanikającego gradientu. Przykłady to:
+                \begin{itemize}
+                    \item Idem \[id(a) = a\]
+                    \item Krokowa (Heavyside). Neuron wykorzystujący tę funkcję nazywany jest neuronem McCullocha-Pittsa. Jest to najprostsza funkcja aktywacji, która modeluje podstawowe zachowanie biologicznego neuronu. Jednakże jej zastosowanie w praktyce jest ograniczone ze względu na brak różniczkowalności w punkcie progowym, co utrudnia stosowanie metod gradientowych do trenowania sieci neuronowych. \cite{haykin2009neural}
+                     \[Th_{\geq 0}(a) = \begin{cases}
+                                                                0, & a>0, \\
+                                                                1, & a \leq 0
+                                                            \end{cases}
+                                                            \]
+
+                    \item Sigmoidalna. Najczęściej używana. Stanowi kompromis między zachowaniami liniowymi a nieliniowymi. \cite{haykin2009neural}
+                    \[\sigma(a) = \frac{1}{1 + e^{-a}}\]
+                    \item Signum. Funkcja aktywacji signum jest podobna do funkcji skoku jednostkowego, ale zamiast przyjmować wartości 0 i 1, przyjmuje wartości -1 i 1. Jest to funkcja nieciągła, która zmienia swoją wartość w punkcie zero. Ze względu na brak różniczkowalności w punkcie zero, funkcja signum jest rzadko stosowana w praktyce do trenowania sieci neuronowych za pomocą metod gradientowych.
+                    \[\operatorname{sgn}(a) = \begin{cases}
+                                            -1, & a < 0, \\
+                                            0, & a = 0, \\
+                                            1, & a > 0
+                                        \end{cases}\]
+                    \item Hiperboliczna tangens (tanh). Funkcja ta jest podobna do sigmoidalnej, ale jej wartości wyjściowe mieszczą się w zakresie od -1 do Funkcja tanh jest różniczkowalna i ma korzystne właściwości gradientowe, co czyni ją popularnym wyborem w sieciach neuronowych.
+                    \[\tanh(a) = \frac{1-e^{-2a}}{1+e^{-2a}}\]
+                \end{itemize}
+            \item Rectified-based functions. Powszechnie używana rodzina funkcji do problemów uniwersalnej aproksymacji ze względu na swoją prostotę i efektywność obliczeniową. Są bardziej odpowiednie na zjawisko zanikającego gradientu. Przykłady to:
+                \begin{itemize}
+                    \item ReLU (Rectified Linear Unit). Ułatwia tzw. rzadkie kodowanie (ang. \textit{sparse coding}), ze względu na niską ilość aktywowanych neuronów w sieci. Jej implementacja może prowadzić do zjawiska „martwych neuronów", gdzie wagi przestają się aktualizować, jeśli kombinacja liniowa wag i wejść jest zawsze ujemna. Nie jest różniczkowalna w punkcie zero co może powodować problemy podczas trenowania sieci neuronowej za pomocą metod gradientowych.
+                     \[ReLU(a) = \max(0, a)\]
+                    \item Softplus. Gładkie przybliżenie funkcji ReLU, dzięki czemu jest różniczkowalna w całej swojej dziedzinie, szczególnie w punkcie zero. Dzięki temu umożliwia bardziej stabilne trenowanie sieci neuronowych za pomocą metod gradientowych. Teoretycznie zakłada lepsze zachowanie i łatwiejsze uczenie, jednak istnieją badania, które temu zaprzeczają, sugerując użycie ReLu dla uczenia pod nadzorem.
+                    \[Softplus(a) = \ln(1 + e^{a})\]
+                \end{itemize}
+        \end{itemize}
+    \item [Funkcje aktywacji o zmiennym kształcie (ang \textit{Trainable shape}).] To zbiór funkcji aktywacji, których kształt jest uczony podczas procesu uczenia. Pozwala to na lepsze dopasowanie funkcji aktywacji do specyficznych cech danych i zadań, co może prowadzić do poprawy wydajności sieci neuronowej. Zbiór ten dodatkowo dzielony na dwa podzbiory:
+        \begin{itemize}
+            \item Parametryzowane standardowe funkcje aktywacji. To funkcje aktywacji, które wprowadzają dodatkowe parametry do istniejących funkcji o ustalonym kształcie. Parametry te są aktualizowane w trakcie uczenia sieci. Przykłady to:
+                \begin{itemize}
+
+                    \item Parametryzowana funkcja Sigmoidalna. Wprowadza dodatkowy parametr skalujący, który pozwala na dostosowanie nachylenia funkcji sigmoidalnej do specyficznych cech danych. Parametry $\alpha$ i $\beta$ są uczone przy wykorzystaniu maleniu gradientu w algorytmie \textit{backpropagation}.
+                    \[\sigma(a) = \frac{\alpha}{1 + e^{-\beta a}}\]
+
+                    \item Parametryzowana funkcja ReLU (PReLU). Funkcja aktywacji podobna do ReLU, która uczy się kształtu swojej części ujemnej dzięki dodatkowemu parametrowi $\alpha$. Parametr ten jest trenowany razem z resztą sieci przy użyciu klasycznych metod gradientowych i backpropagation, bez weight decay, aby nie był zmniejszany do zera. Jego wpływ obliczeniowy jest minimalny. Eksperymenty pokazują, że wartość $\alpha$ rzadko przekracza 1. Funkcja pozostaje zasadniczo zmodyfikowanym ReLU, różniącym się tylko w części ujemnej.
+                    \[PReLU(a; \alpha) = \begin{cases}
+                                            a, & a > 0, \\
+                                            \alpha a, & a \leq 0
+                                        \end{cases}, \quad \alpha > 0\]
+                \end{itemize}
+            \item Funkcje oparte na metodach zespołowych. To funkcje aktywacji, które są tworzone poprzez kombinację innych funkcji aktywacji poprzez kombinację liniową lub tworząc dodatkową sieć neuronową. 
+        \end{itemize}
+\end{description}
+
+\subsection{Jaką rolę pełnią dodatkowe warstwy w sieci neuronowej?}
+

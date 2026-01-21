@@ -21,7 +21,7 @@ def fancy_dendrogram(*args, **kwargs):
 
     if not kwargs.get('no_plot', False):
         plt.title('Hierarchical Clustering Dendrogram')
-        #plt.xlabel('sample index or (cluster size)')
+        # plt.xlabel('sample index or (cluster size)')
         plt.ylabel('Distance')
         for i, d, c in zip(ddata['icoord'], ddata['dcoord'], ddata['color_list']):
             x = 0.5 * sum(i[1:3])
@@ -82,7 +82,7 @@ def correlation_analysis(df, output_path, max_distance=0.01):
 
     # Correlation heatmap
     fig, axes = plt.subplots(figsize=(10, 10),
-                             #dpi=300,
+                             # dpi=300,
                              layout='constrained',
                              )
     sns.heatmap(pearson.round(2), annot=True,
@@ -94,7 +94,7 @@ def correlation_analysis(df, output_path, max_distance=0.01):
     linkage_corr = spc.linkage(pearson, method='complete',
                                metric='cosine', optimal_ordering=True)
 
-    fig, axes = plt.subplots(figsize=(10, 5), layout='constrained',
+    fig, axes = plt.subplots(nrows=2, figsize=(10, 5), layout='constrained', sharex=True,
                              # dpi=150
                              )
     tree = fancy_dendrogram(linkage_corr,
@@ -106,10 +106,28 @@ def correlation_analysis(df, output_path, max_distance=0.01):
                             leaf_rotation=90,
                             max_d=max_distance,
                             annotate_above=0.09,
-                            ax=axes)
+                            ax=axes[0])
+    tree = fancy_dendrogram(linkage_corr,
+                            # orientation='left',
+                            p=100,
+                            labels=pearson.columns.tolist(),
+                            show_leaf_counts=True,
+                            show_contracted=True,
+                            leaf_rotation=90,
+                            max_d=max_distance,
+                            annotate_above=0.09,
+                            ax=axes[1])
+
+    axes[0].tick_params(
+        axis='x',
+        labelbottom=False)
+    axes[0].axhline(y=max_distance, c='k')
+    axes[0].set_title('Dendrogram')
+    axes[1].set_title('Zoomed Dendrogram')
+    axes[1].set_ylim(top=max_distance + 0.05)
     fig.savefig(f'{output_path}/Dendrogram.png')
-    axes.set_ylim(top=max_distance + 0.05)
-    fig.savefig(f'{output_path}/Dendrogram_zoomed.png')
+    
+    # fig.savefig(f'{output_path}/Dendrogram_zoomed.png')
 
     return pearson, linkage_corr
 
@@ -122,7 +140,7 @@ def clusters(pearson, linkage_corr, max_distance=0.25):
 
     clustered_features = {}
     for feature, cluster_id in zip(pearson.columns, clusters):
-        clustered_features.setdefault(cluster_id, []).append(feature)
+        clustered_features.setdefault(int(cluster_id), []).append(feature)
 
     selected_features = []
     for cluster_id, features in clustered_features.items():
@@ -133,7 +151,7 @@ def clusters(pearson, linkage_corr, max_distance=0.25):
                 'Correlation', ascending=False)['Feature'].iloc[0]
             selected_features.append(feature)
 
-    return selected_features
+    return selected_features,clustered_features
 
 
 def main(max_distance=0.01):
@@ -144,7 +162,7 @@ def main(max_distance=0.01):
     pearson, linkage_corr = correlation_analysis(df_scaled,
                                                  output_path=f'{filepath}/Output',
                                                  max_distance=max_distance)
-    selected_features = clusters(
+    selected_features,clusters_dict = clusters(
         pearson, linkage_corr, max_distance=max_distance)
 
     df_preprocessed = df_scaled[selected_features]
