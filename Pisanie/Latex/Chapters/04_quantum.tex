@@ -11,7 +11,7 @@ Obliczenia kwantowe zasadnicza różnią się dwoma kluczowymi aspektami:
 
 Wykorzystanie kwantowego podejścia do opisu danych umożliwia znaczące przyspieszenie obliczeń oraz m.in. systemy kryptograficzne odporne na niektóre typy ataków. \cite{Nakahara2013}
 
-\subsection{Czym jest kubit?}
+\subsection{Czym jest kubit?}\cite{quantum_intro}
 Qubit (ang. \textit{quantum bit}) jest podstawową jednostką informacji w obliczeniach kwantowych, odpowiednikiem bitu w obliczeniach klasycznych. W przeciwieństwie do bitu, który może przyjmować jedną z dwóch wartości (0 lub 1), kubit może znajdować się w stanie superpozycji obu tych wartości jednocześnie. Stany qubitu można zwizualizować na sferze Blocha (o promieniu równym 1) w układzie kartezjańskim. Zgodnie z konwencją: oś z jest skieroawana w górę a oś y w bok.
 Szczególnymi przypadkami stanów qubitu są:
 
@@ -38,7 +38,7 @@ $\ket{-i}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}-i\ket{1}\right)$ & (0, -1, 0) \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Figures/bloch_from_introduction_pg_76.png}
-    \caption{Sfera Blocha z zaznaczonymi podstawowymi stanami qubitów. Źródło: \cite{Nakahara2013}}
+    \caption{Sfera Blocha z zaznaczonymi podstawowymi stanami qubitów.}
     \label{fig:bloch_sphere}
 \end{figure}
 
@@ -57,7 +57,7 @@ gdzie $\ket{\Psi}$, to stan kwantowy, $P(0)$ to prawdopodobieństwo uzyskania wy
 
 Pomiary można wykonywać w różnych bazach (względem różnych osi na sferze Blocha), co pozwala na uzyskanie różnych informacji o stanie qubitu przed pomiarem.
 
-\subsection{Jakie istnieją bramki – przykłady i opis działania}
+\subsection{Bramki kwantowe}\cite{quantum_intro}
 Bramki kwantowe stanowią odpowiednik klasycznych bramek logicznych w obliczeniach kwantowych. Są transformacją, liniowym mapowaniem stanu qubitu w inne stany. Po przekształceniu całkowite prawdopodobieństwo stanu wciąż wynosi 1. W ujęciu algebry liniowej bramki kwantowe są macierzami. Poniższa tabela przedstawia wybrane bramki kwantowe wraz z ich działaniem na bazie, reprezentacją macierzową oraz interpretacją funkcjonalną.
 Każda bramka kwantowa jest macierzą unitarną, co oznacza:
 \[
@@ -98,5 +98,7 @@ Szczególną własnością powyższych bramek jest:
 \[X^2 = Y^2 = Z^2 = S^4 = T^8 = I,\]
 
 \subsection{Obwód bramkowy zamiast warstw. Wymiana środka sieci na bramki}
+
+
 \subsection{Uczenie przez optymalizatory klasyczne}
 \subsection{Przykład prostego obwoduyu pennylane}
