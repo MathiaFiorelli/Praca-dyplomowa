@@ -1,6 +1,62 @@
 \newpage
 \section{Sieci kwantowe}
+Obliczenia kwantowe oraz kwantowe przetwarzanie danych są relatywnie nowymi dyscyplinami, w których zasady fizyki kwantowej są wykorzystywane do przechowywanie i przetwarzania danych. \cite{Nakahara2013}
+Uczenie maszynowe przyczyniło się do rewolucyjnych zastosowań zarówno w społeczeństwie jak i w świecie nauki, jednakże wraz z ciągle słabnącym prawem Moore’a poszukiwane są nowe ścieżki celem podtrzymania dynamizmu rozwoju technologicznego. Jedną z tych ścieżek jest kwantowe uczenie maszynowe, które podąża za rozwojem pierwszych urządzeń kwantowych, których powstanie jest skutkiem próby ominięcia ograniczeń technologicznych i termodynamicznych klasycznej komputacji.\cite{training_deep_quantum_nn}
+O ile obecnie wykorzystywane technologie podlegają prawom fizyki kwantowej o tyle logika pracy opiera się na fizyce klasycznej. 
+Obliczenia kwantowe zasadnicza różnią się dwoma kluczowymi aspektami:
+\begin{itemize}
+    \item Superpozycja stanu. Układ może znajdować się w dwóch stanach jednocześnie, dopóki nie zostanie wykonany jego pomiar.
+    \item Splątanie stanów. Pomiar jednego układu wpływa na stan innych z nim splątanych układów.
+\end{itemize}
+
+Wykorzystanie kwantowego podejścia do opisu danych umożliwia znaczące przyspieszenie obliczeń oraz m.in. systemy kryptograficzne odporne na niektóre typy ataków. \cite{Nakahara2013}
+
 \subsection{Czym jest kubit?}
+Qubit (ang. \textit{quantum bit}) jest podstawową jednostką informacji w obliczeniach kwantowych, odpowiednikiem bitu w obliczeniach klasycznych. W przeciwieństwie do bitu, który może przyjmować jedną z dwóch wartości (0 lub 1), kubit może znajdować się w stanie superpozycji obu tych wartości jednocześnie. Stany qubitu można zwizualizować na sferze Blocha (o promieniu równym 1) w układzie kartezjańskim. Zgodnie z konwencją: oś z jest skieroawana w górę a oś y w bok.
+Szczególnymi przypadkami stanów qubitu są:
+
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l c c c}
+\hline
+\textbf{Oznaczenie} & \textbf{Stan} & \textbf{Współrzędne na sferze Blocha} \\
+\hline
+$\ket{0}$ & $\ket{0}$ & (0, 0, 1) \\
+$\ket{1}$ & $\ket{1}$ & (0, 0, -1) \\
+$\ket{+}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}+\ket{1}\right)$ & (1, 0, 0) \\
+$\ket{-}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}-\ket{1}\right)$ & (-1, 0, 0) \\
+$\ket{i}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}+i\ket{1}\right)$ & (0, 1, 0) \\
+$\ket{-i}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}-i\ket{1}\right)$ & (0, -1, 0) \\
+\hline
+\end{tabular}
+}
+\caption{Reprezentacja podstawowych stanów qubitów na sferze Blocha.}
+\label{tab:qubit_bloch}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/bloch_from_introduction_pg_76.png}
+    \caption{Sfera Blocha z zaznaczonymi podstawowymi stanami qubitów. Źródło: \cite{Nakahara2013}}
+    \label{fig:bloch_sphere}
+\end{figure}
+
+Interpetowalnym wynikiem pomiaru qubitu jest zawsze jedna z dwóch wartości: 0 lub 1. Prawdopodobieństwo uzyskania każdej z tych wartości zależy od stanu, w jakim znajduje się qubit przed pomiarem. Na przykład, jeśli qubit jest w stanie $\ket{+}$, to istnieje 50\% szans na uzyskanie wyniku 0 i 50\% szans na uzyskanie wyniku 1 podczas pomiaru.
+
+Prawdopodobieństwo wyznacza się ze wzoru:
+
+\begin{equation}
+\ket{\psi} = \alpha \ket{0} + \beta \ket{1}, \quad
+P(0) = |\braket{0|\psi}|^2 = |\alpha|^2, \quad
+P(1) = |\braket{1|\psi}|^2 = |\beta|^2,
+\end{equation}
+
+
+gdzie $\ket{\Psi}$, to stan kwantowy, $P(0)$ to prawdopodobieństwo uzyskania wyniku 0, a $P(1)$ to prawdopodobieństwo uzyskania wyniku 1. Wartości $\alpha$ i $\beta$ są amplitudami prawdopodobieństwa dla stanów $\ket{0}$ i $\ket{1}$ odpowiednio, przy czym muszą spełniać warunek normalizacji: $|\alpha|^2 + |\beta|^2 = 1$.
+
+Pomiary można wykonywać w różnych bazach (względem różnych osi na sferze Blocha), co pozwala na uzyskanie różnych informacji o stanie qubitu przed pomiarem.
+
 \subsection{Jakie istnieją bramki – przykłady i opis działania}
 \subsection{Obwód bramkowy zamiast warstw. Wymiana środka sieci na bramki}
 \subsection{Uczenie przez optymalizatory klasyczne}
