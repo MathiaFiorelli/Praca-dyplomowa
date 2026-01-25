@@ -58,6 +58,45 @@ gdzie $\ket{\Psi}$, to stan kwantowy, $P(0)$ to prawdopodobieństwo uzyskania wy
 Pomiary można wykonywać w różnych bazach (względem różnych osi na sferze Blocha), co pozwala na uzyskanie różnych informacji o stanie qubitu przed pomiarem.
 
 \subsection{Jakie istnieją bramki – przykłady i opis działania}
+Bramki kwantowe stanowią odpowiednik klasycznych bramek logicznych w obliczeniach kwantowych. Są transformacją, liniowym mapowaniem stanu qubitu w inne stany. Po przekształceniu całkowite prawdopodobieństwo stanu wciąż wynosi 1. W ujęciu algebry liniowej bramki kwantowe są macierzami. Poniższa tabela przedstawia wybrane bramki kwantowe wraz z ich działaniem na bazie, reprezentacją macierzową oraz interpretacją funkcjonalną.
+Każda bramka kwantowa jest macierzą unitarną, co oznacza:
+\[
+U^{\dagger} U = U U^{\dagger} = I,
+\]
+gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem hermitowskim (transpozycja macierzy + sprzężenie), a $I$ jest macierzą jednostkową.
+
+
+\begin{table}[H]
+\resizebox{\textwidth}{!}
+{
+    \centering
+    \begin{tabular}{l l l l}
+        \hline
+        \textbf{Bramka} & \textbf{Działanie} & \textbf{Forma macierzowa} & \textbf{Interpretacja} \\
+        \hline
+        Identity & $\begin{aligned} I\ket{0} &= \ket{0} \\ I\ket{1} &= \ket{1} \end{aligned}$ & $I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$ & Brak zmian (operacja neutralna). \\
+        \hline
+        Pauli $X$ & $\begin{aligned} X\ket{0} &= \ket{1} \\ X\ket{1} &= \ket{0} \end{aligned}$ & $X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $x$. \\
+        \hline
+        Pauli $Y$ & $\begin{aligned} Y\ket{0} &= i\ket{1} \\ Y\ket{1} &= -i\ket{0} \end{aligned}$ & $Y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $y$ \\
+        \hline
+        Pauli $Z$ & $\begin{aligned} Z\ket{0} &= \ket{0} \\ Z\ket{1} &= -\ket{1} \end{aligned}$ & $Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $z$. \\
+        \hline
+        Phase $S$ & $\begin{aligned} S\ket{0} &= \ket{0} \\ S\ket{1} &= i\ket{1} \end{aligned}$ & $S = \begin{pmatrix} 1 & 0 \\ 0 & i \end{pmatrix}$ & Obrót o $\frac{\pi}{2}$ wokół osi $z$. \\
+        \hline
+        $T$ & $\begin{aligned} T\ket{0} &= \ket{0} \\ T\ket{1} &= e^{i\pi/4}\ket{1} \end{aligned}$ & $T = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{pmatrix}$ & Obrót o $\frac{\pi}{4}$ wokół osi $z$. \\
+        \hline
+        Hadamard $H$ & $\begin{aligned} H\ket{0} &= \frac{\ket{0} + \ket{1}}{\sqrt{2}} \\ H\ket{1} &= \frac{\ket{0} - \ket{1}}{\sqrt{2}} \end{aligned}$ & $H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$ & Obrót od $\pi$ jednocześnie wokół oś $x$ i $z$ \\
+        \hline
+    \end{tabular}
+}
+\caption{...}
+\label{tab:...}
+\end{table}
+
+Szczególną własnością powyższych bramek jest:
+\[X^2 = Y^2 = Z^2 = S^4 = T^8 = I,\]
+
 \subsection{Obwód bramkowy zamiast warstw. Wymiana środka sieci na bramki}
 \subsection{Uczenie przez optymalizatory klasyczne}
 \subsection{Przykład prostego obwoduyu pennylane}
