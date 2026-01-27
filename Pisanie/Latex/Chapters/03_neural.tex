@@ -187,3 +187,11 @@ Przy założeniu że użyta zostaje funkcja aktywacji sigmoidalna, algorytm wste
     \end{enumerate}
 
 \end{tcolorbox}
+
+\subsection{Autoenkodery}
+Szczególnym przypadkiem sieci neuronowych są autoenkodery. Sieci te są wytrenowane, aby ich głównym zadaniem było kopiowanie danych z wejścia na wyjście. Autoenkodery znajdują także zastosowanie w odszumianiu danych oraz w wydobywaniu istotnych cech danych wejściowych. Autoenkodery to kombinacja funkcji enkodera $\mathbf{h} = f(\mathbf{x})$ i dekodera $\mathbf{r} = g(\mathbf{h})$. Enkoder wykonuje transformację wartości wejściowej na nowy format, a dekoder przyjmuje nowy format jako swoje wejście i przekształca, na format pierwotny.
+Trywialne rozwiązanie $g(f(\mathbf{x}))=\mathbf{x}$ nie ujawnia istotnej struktury danych. 
+Autoenkodery typu undercomplete to takie które zmniejszają wymiar danych po przejściu przez enkoder. Proces uczenia takich autoenkoderów polega na zadaniu optymalizacyjnym funkcji straty $L(\mathbf{x},g(f(\mathbf{x})))$, która penalizuje różnicę między wejściem enkodera a wyjściem dekodera. Autoenkoder o linowym dekoderze wykorzystujący błąd średniokwadratowy jako funkcję straty wykonuje te same zadania co PCA.
+Autorzy wskazują jednak, że jeżeli model ma zbyt dużą „zdolność” (ang. \textit{capacity}) (np. w wyniku wykorzystania nieliniowych enkoderów, czy zbyt skomplikowanej architektury sieci), to istnieje ryzyko, że model będzie jedynie kopiował dane bez uczenia się cech danych. Podobny problem występuje w modelach, w których enkoder mapuje dane wejściowe do wymiaru równego wymiarowi wejścia lub większego. Ryzyko to można zwalczać utrzymując nierozbudowaną architekturą sieci lub wprowadzając specjalną funkcję straty, która penalizuje za trywialne kopiowanie. 
+Przykładem jest sparse autoenkoder będący autoenkoderem regularyzowanym. 
+Różni się od undecomplete dodatkowym składnikiem funkcji straty, która oprócz kary za różnicę między wejściem a wyjściem penalizuje również za zbyt wiele aktywnych neuronów, innymi słowy, wprowadza karę za nadmierną aktywację neuronów w warstwie ukrytej, wymuszając rzadkość reprezentacji
