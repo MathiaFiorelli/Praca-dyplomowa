@@ -186,8 +186,64 @@ x' = 2 \cdot \frac{x - x_{\min}}{x_{\max} - x_{\min}} - 1,
 \]
 gdzie $x$ oznacza wartość oryginalną cechy, natomiast $x_{\min}$ i $x_{\max}$ są odpowiednio jej wartością minimalną i maksymalną.
 
-\subsubsection{Opis modeli}
+\subsubsection{Architektura modeli}
 Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o budowie sieci neuronowych oraz jeden wykorzystujący schematy kwantowe.
+
+Wszystkie modele zostały zaprojektowane w środowisku Python.
+Dla neuronowych autoenkoderów wykorzystano bibliotekę torch, założono maksymalnie 1000 kroków treningowych, a także zaimplementowano algorytm zatrzymujący uczenie, jeśli w ciągu 30 kroków błąd nie poprawi się o 1e-4. Do wyznaczenia błędu wykorzystano błąd średniokwadratowy (MSE) a jako algorytm optymalizujący algorytm Adam (Adaptive Moment Estimation). 
+każdy model neuronowy wykorzystuje nn.Linear klasę, która wykonuję kombinację liniową wag i parametrów wejściowych o określonej ilości wejść i wyjść. Na przykład:
+\begin{verbatim}
+nn.Linear(6, 2)    
+\end{verbatim}
+ma 6 wejść i 2 wyjścia.
+Ponadto każdy neuron implementuje funkcję aktywacji $ReLu$ między warstwami, z wyjątkiem wyjścia z dekodera, które wykorzystuje funkcję $tanh$, aby wartości na wyjściu miały ten sam zbiór wartości co na wejściu. Dokładna archiotektura każdego z autoenkoderów nauronowych została przedstawiona w tabeli \ref{tab:autoencoder_architecture}\\
+
+Do zbudowania kwantowego autoenkodera wykorzystano bibliotekę pennylane. Model składa się z enkodera i dekodera. Wykorzystano 6 qubitów – tyle ile cech w badanym zbiorze danych. Przyjęto 2 warstwy latentne i 4 śmieciowe oraz dwie warstwy głębokości dla operatorów. Wykorzystano domyślne urządzenie symulujące działania komputera kwantowego. Dane zostały wprowadzone poprzez rotację wokół osi Y, następnie każdy qubit został splątany z sąsiadem na kształt łańcucha.
+Model wykonuje pomiar po przejściu przez dekoder i wyznacza błąd:
+\[ Loss = \alpha loss_{recon} + \beta loss_{com}\],
+gdzie:
+\begin{itemize}
+    \item $loss_{recon}$ to błąd średniokwadratowy pomiędzy danymi wejściowymi a wyjściowymi, czyli między oryginałem a rekonstrukcją,
+    \item $loss_{com} = 1 - \frac{1}{N}\sum_{x}^{N}Z\left(\rho_{x}^{trash}\right)$ to błąd kompresji, rozbieżność między zdarzeniem pewnym a średnim prawdopodobieństwem nieaktywnych qubitow śmieciowych.
+    \item $\alpha = 1.0$, $\beta=0.5$ to współczynniki wagowe dla obu błędów.
+\end{itemize}
+
+Oprócz penalizacji za niedokładne odwzorowanie model karze również za brak kompresji, i.e. za niezerowy stan na qubitach śmieciowych.
+Zaimplementowano algorytm zatrzymujący uczenie, jeśli w ciągu 30 kroków błąd nie poprawi się o 5e-4. Do optymalizacji błędu wykorzystano algorytm optymalizujący algorytm Adam (Adaptive Moment Estimation). 
+Rysunki \ref{fig:quantum_decoder_graph}, \ref{fig:quantum_latent_graph} oraz \ref{fig:quantum_trash_graph} przedstawiają schematy kwantowego autoenkodera.
+
+Po transformacji przez funkcję enkodującą dane zostały skompresowane do przestrzeni latentnej o wymiarze 2. Dane zostały zaprezentowane w tabelach (pierwsze 10 wierszy) \ref{tab:latent_neural} oraz \ref{tab:latent_quantum}, a także na wykresach \ref{fig:neural_latent_data} oraz \ref{fig:quantum_latent_data}. O ile wartości latentne dla autoenkodera neuronowego rozciągają się na szeroki zakres wartości, o tyle wartości latentne dla autoenkodera kwantowego mieszczą się w zakresie od 0.7 do 1.0 dla obu zmiennych latentnych. Wartości latentne dla autoenkodera kwantowego są dodatnie ze względu na sposób w jaki dane zostały zakodowane na qubitach poprzez rotację wokół osi Y. Wartości odpowiadają wartości oczekiwanej stanu qubitu po przejściu przez bramkę Pauli-Z, Innymi słowy prawdopodobieństwu znalezienia qubitu w stanie $\ket{0}$ po pomiarze. Im większa wartość tym większe prawdopodobieństwo. Wartości latentne dla autoenkodera neuronowego nie mają fizycznej interpretacji. 
+
+\begin{table}[ht]
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \caption{Wartości latentne dla pierwszych 10 próbek w modelu autoenkodera neuronowego \#1 z dwiema zmiennymi latentnymi.}
+        \label{tab:latent_neural}
+        \input{Output/Model_Analysis/latent_neural.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \caption{Wartości latentne dla pierwszych 10 próbek w modelu autoenkodera kwantowego z dwiema zmiennymi latentnymi.}
+        \label{tab:latent_quantum}
+        \input{Output/Model_Analysis/latent_quantum.tex}
+    \end{minipage}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Autoencoder_Latent_Space.png}
+    \caption{Wykres punktowy wartości warstwy latentnej autoenkodera neuronowego \#1}
+    \label{fig:neural_latent_data}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Latent_Space.png}
+    \caption{Wykres punktowy wartości warstwy latentnej autoenkodera kwantowego}
+    \label{fig:quantum_latent_data}
+\end{figure}
+
 
 %Tablica podsumująca architektury neuronowych autoenkoderów
 \begin{table}[H]
@@ -239,30 +295,6 @@ Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o 
 \end{tabular}
 \end{table}
 
-
-\begin{quantikz}
-\lstick{$\ket{0}$} & \gate{R_y(x_1)} & \ctrl{1} & \gate{R_y(\theta_1)} & \meter{} \\
-\lstick{$\ket{0}$} & \gate{R_y(x_2)} & \targ{} & \gate{R_y(\theta_2)} & \meter{}
-\end{quantikz}
-
-\input{Output/Model_Analysis/reconstruction_full_summary}
-
-\input{Output/Model_Analysis/reconstruction_simple_summary}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Loss_Comparison.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
-    \label{fig:neural_loss}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Time_Comparison.png}
-    \caption{Wykres słupkowy porównujący czasy trenowania modeli neuronowych}
-    \label{fig:neural_times}
-\end{figure}
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Decoder_QNode.png}
@@ -283,6 +315,26 @@ Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o 
     \caption{Schemat kwantowego autoenkodera - pomiar warstwy śmieciowej}
     \label{fig:quantum_trash_graph}
 \end{figure}
+
+\input{Output/Model_Analysis/reconstruction_full_summary}
+
+\input{Output/Model_Analysis/reconstruction_simple_summary}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Loss_Comparison.png}
+    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \label{fig:neural_loss}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Time_Comparison.png}
+    \caption{Wykres słupkowy porównujący czasy trenowania modeli neuronowych}
+    \label{fig:neural_times}
+\end{figure}
+
+
 
 \begin{figure}[H]
     \centering
