@@ -16,6 +16,8 @@ Qubit (ang. \textit{quantum bit}) jest podstawową jednostką informacji w oblic
 Szczególnymi przypadkami stanów qubitu są:
 
 \begin{table}[H]
+\caption{Reprezentacja podstawowych stanów qubitów na sferze Blocha.}
+\label{tab:qubit_bloch}
 \centering
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l c c c}
@@ -31,8 +33,7 @@ $\ket{-i}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}-i\ket{1}\right)$ & (0, -1, 0) \\
 \hline
 \end{tabular}
 }
-\caption{Reprezentacja podstawowych stanów qubitów na sferze Blocha.}
-\label{tab:qubit_bloch}
+
 \end{table}
 
 \begin{figure}[H]
@@ -67,6 +68,8 @@ gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem 
 
 
 \begin{table}[H]
+\caption{Przykładowe bramki kwantowe działające na pojedynczym qubicie.}
+\label{tab:bramki_kwantowe}
 \resizebox{\textwidth}{!}
 {
     \centering
@@ -90,8 +93,7 @@ gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem 
         \hline
     \end{tabular}
 }
-\caption{Przykładowe bramki kwantowe działające na pojedynczym qubicie.}
-\label{tab:bramki_kwantowe}
+
 \end{table}
 
 Szczególną własnością powyższych bramek jest:
@@ -153,9 +155,9 @@ gdzie:
     \item $\mathcal{F}(X) = \sum_{\alpha}A_{\alpha}^{\dagger}XA{\alpha}$ - sprzężny kanał kwantowy do $\varepsilon(X)=\sum_{\alpha}A_{\alpha}XA{\alpha}^{\dagger}$, czyli kanał przejścia z $l+1$ do $l$,
 \end{itemize}
 
-Własnością tej struktury sieci jest fakt, że dla wyznaczenia $K_j^l$ dla warstwy $l-1$ oraz $l$, potrzebne są jedynie informacje z tych dwóch warstw. Oznacza to, że aktualizacja parametrów może być wykonywana lokalnie dla każdej warstwy, bez konieczności propagacji wstecznej przez całą sieć, jak ma to miejsce w klasycznych sieciach neuronowych. $K$ zatem skaluje się z szerokością sieci a nie z jej głębokością, co jest korzystne z punktu widzenia efektywności obliczeniowej.
+Własnością tej struktury sieci jest fakt, że dla wyznaczenia $K_j^l$ dla warstwy $l-1$ oraz $l$, potrzebne są jedynie informacje z tych dwóch warstw. Oznacza to, że aktualizacja lokalnych parametrów może być wykonywana lokalnie dla każdej warstwy, bez konieczności wyznaczania każdego z parametrów sieci, jak ma to miejsce w klasycznych sieciach neuronowych. $K$ zatem skaluje się z szerokością sieci a nie z jej głębokością, co jest korzystne z punktu widzenia efektywności obliczeniowej.
 
-Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosnącą przestrzeń Hilberta. Autorzy w tym podejściu dostrzegają kluczową zaletę jaką jest brak występowania tzw. zanikania gradientu (ang. \textit{barren plateau}) podczas trenowania sieci kwantowych, co jest powszechnym problemem w klasycznych sieciach neuronowych oraz innych architekturach QNN.
+Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosnącą przestrzeń Hilberta. Autorzy w tym podejściu dostrzegają kluczową zaletę ograniczenie występowania tzw. zanikania gradientu (ang. \textit{barren plateau}) podczas trenowania sieci kwantowych, co jest powszechnym problemem w klasycznych sieciach neuronowych oraz innych architekturach QNN.
 
 \begin{tcolorbox}[title=Algorytm trenowania głębokiej sieci kwantowej,
     colback=blue!5!white,colframe=blue!75!black,
@@ -163,18 +165,18 @@ Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosną
     
     \begin{enumerate}
         \item \textbf{Inicjalizacja} Krok $s=0$. Losowo inicjalizowane są parametry bramek kwantowych w sieci.
-        \item \textbf{Feedforward} Dla każdej pary stanów treningowych $\ket{\phi_x^{in}},\ket{\phi_x^{out}}$ wykonaj:
+        \item \textbf{Feedforward} Dla każdej pary stanów treningowych $\ket{\phi_x^{in}},\ket{\phi_x^{out}}$ wykonane są następujące działania:
         \begin{enumerate}
-            \item Wyznacz \[\mathcal{T} =\rho_x^{l-1}(s)\otimes \ket{0...0}_l\bra{0...0} \]
-            \item Zastosuj operatory \[\mathcal{O} = \prod_{j=m_l}^{1}U_j^l(s)\mathcal{T}\prod_{j=1}^{l}{U_j^l(s)}^{\dagger} \]
-            \item Wyznacz ślad częściowy \[\rho_x^l(s) = \operatorname{tr}_{l-1}(\mathcal{O}) \]
-            \item Przechowaj $\rho_x^l(s)$ 
+            \item Wyznaczony zostaje stan: \[\mathcal{T} =\rho_x^{l-1}(s)\otimes \ket{0...0}_l\bra{0...0} \]
+            \item Zastosowane zostają operatory \[\mathcal{O} = \prod_{j=m_l}^{1}U_j^l(s)\mathcal{T}\prod_{j=1}^{m_l}{U_j^l(s)}^{\dagger} \]
+            \item Wyznaczony zostaje ślad częściowy \[\rho_x^l(s) = \operatorname{tr}_{l-1}(\mathcal{O}) \]
+            \item Przechowany zostaje stan $\rho_x^l(s)$ 
         \end{enumerate}
         Ten krok jest równoważny z wyznaczeniem $\rho_x^{out}(s)$ zgodnie z równaniem \ref{eq:stan_wyjscie_2}.
         \item \textbf{Aktualizacja parametrów}
         \begin{enumerate}
-            \item Oblicz funkcję kosztu $C(s)$ zgodnie z równaniem \ref{eq:f_kosztu}.
-            \item Wyznacz każdą macierz $K_j^l(s)$ 
+            \item Oblicza się funkcję kosztu $C(s)$ zgodnie z równaniem \ref{eq:f_kosztu}.
+            \item Wyznacza się każdą macierz $K_j^l(s)$ dla każdej warstwy $l$ i każdego perceptronu $j$ w tej warstwie:
             \begin{equation}
                 K_j^l(s)=\eta \frac{2^{m_{l-1}}}{N}\sum_{x=1}^{N}\operatorname{tr}_{rest}M_j^l
             \end{equation}
@@ -186,15 +188,14 @@ Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosną
                 \[\left[\prod_{\alpha=j}^{1}U_{\alpha}^l(\mathcal{T})\prod_{\alpha=1}^{j}{U_{\alpha}^l}^{\dagger},
                 \prod_{\alpha=j+1}^{m_l}{U_{\alpha}^l}^{\dagger} (\mathbb{I}_{l-1}\otimes \sigma_x^l)\prod_{\alpha=m_l}^{j+1}U_{\alpha}^l\right]\]
             \end{itemize}
-            \item \textbf{Aktualizacja operatorów unitarnych} Dla każdej warstwy l i każdego perceptronu j wykonaj:
+            \item \textbf{Aktualizacja operatorów unitarnych} Dla każdej warstwy l i każdego perceptronu j wykonane zostają operacje unitarne:
         \[U_j^l(s+1) = e^{i\epsilon K_j^l(s)}U_j^l(s)\]
             \item Zwiększ krok $s = s + \epsilon$ 
         \end{enumerate}
-        \item \textbf{Iteracja} Powtarzaj kroki 2 i 3 aż do osiągnięcia maksymalnej wartości funkcji kosztu.
+        \item \textbf{Iteracja} Kroki 2 i 3 są powtarzane aż do osiągnięcia maksymalnej wartości funkcji kosztu.
             
     \end{enumerate}
 
 \end{tcolorbox}
-
 
 \subsection{Przykład prostego obwoduyu pennylane}
