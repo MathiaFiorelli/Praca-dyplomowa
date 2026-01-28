@@ -8,7 +8,7 @@ Każdy wiersz zawiera poniżej zestawione kolumny:
 \begin{center}
 \begin{longtable}{|p{1cm}||p{7cm}|p{2.2cm}|p{2cm}|}
 \caption{Zestawienie parametrów silnika}
-\label{table:1} \\
+\label{tab:parametry_silnika} \\
 \hline
 \textbf{L.p.} & \textbf{Nazwa} & \textbf{Oznaczenie} & \textbf{Jednostka} \\
 \hline
@@ -45,7 +45,7 @@ Każdy wiersz zawiera poniżej zestawione kolumny:
 \end{center}
 
 \subsection{Wizualizacja danych (Exploratory Data Analysis)} \label{section_eda}
-Przeprowadzono kompleksową analizę danych począwszy od analizy rozkładu maksymalnego przeżycia dla każdego z silników. Rysunek~\ref{fig:hist_max_life} wskazuje na niesymetryczny rozkład maksymalnej ilości przelatanych cykli. Histogram gromadzi się głównie wokół wartości 200 cykli, chociaż wyjątkowo trwałe silniki o maksymalnym życiu większym niż 350 również znajdują się w zbiorze danych.
+Przeprowadzono kompleksową analizę danych począwszy od analizy rozkładu maksymalnego przeżycia dla każdego z silników. Rysunek~\ref{fig:hist_max_life} wskazuje na niesymetryczny rozkład maksymalnej ilości przelatanych cykli. Histogram gromadzi się głównie wokół wartości 200 cykli, chociaż wyjątkowo trwałe silniki o maksymalnym życiu większym niż 350 również znajdują się w~zbiorze danych.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output//Histograms/Max Life_histogram.png}
@@ -107,7 +107,6 @@ Przy progu odcięcia odległości korelacji równym 0.25 otrzymano następujące
     \includegraphics[width=0.9\linewidth]{Output/Dendrogram.png} 
     \label{fig:dendrogram}
     \caption{Analiza klasteryzacji - dendrogram}
-    \label{fig:cluster}
 \end{figure}
 
 W oparciu o macierz korelacji wykonano wykresy czterech najbardziej skorelowanych cech z RUL w funkcji cykli. Kolory punktów odpowiadają ilości pozostałych cykli do przeżycia: im kolor ciemniejszy tym mniej cykli. 
@@ -116,11 +115,11 @@ W przypadku Ps30 (ciśnienie statyczne na wylocie turbiny wysokiego ciśnienia) 
 
 Również T50 (temperatura całkowita na wylocie turbiny niskiego ciśnienia) rośnie wraz cyklami. Wraz ze spadkiem prędkości powietrza w sprężarkach, powietrze które jest wykorzystywane do chłodzenia komory spalania, w mniej skuteczny sposób odbiera ciepło. W innych modelach przewidywane jest, że temperatura będzie rosnąć w wyniku deterioracji turbiny, co przekłada się na gorsze odebranie energii, jednak w przypadku tego zestawu danych modelowany jest jedynie spadek sprawności sprężarki wysokiego ciśnienia. Zmiany temperatur wahają się od 1390 - 1420 do 1420 - 1440 (\~2\%)
 
-Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia w funkcji przelatanych cykli jest funkcją malejącą, ponieważ wydatek paliwa jest stały w ciśnienie statyczne rośnie. 
+Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia w funkcji przelatanych cykli jest funkcją malejącą, ponieważ wydatek paliwa jest stały a~ciśnienie statyczne rośnie. 
 
 Ciśnienie całkowite za sprężarką wysokiego ciśnienia maleje, ponieważ straty rosną w funkcji cykli.
 
-Warte uwagi jest zgodnie z przewidywaniami RUL w funkcji ilości przelatanych cykli jest funkcją malejącą, jednakże nie jest jednoznaczne dla jakich wartości cech silnik kończy życie. Na rysunku~\ref{fig:scatter} można wyróżnić obszary dla których w przypadku jednych silników pozostaje jeszcze wiele cykli do przelatania podczas gdy dla innych wiąże się z koniecznym remontem. Dodatkowo to podkreśla rysunek~\ref{fig:rul_vs_cycles}, gdzie RUL w funkcji cykli jest funkcją liniową malejącą o tym samym współczynniku nachylenia lecz różnym współczynniku wolnym.
+Warte uwagi jest zgodnie z przewidywaniami RUL w funkcji ilości przelatanych cykli jest funkcją malejącą, jednakże nie jest jednoznaczne dla jakich wartości cech silnik kończy życie. Na rysunku~\ref{fig:scatter} można wyróżnić obszary dla których w przypadku jednych silników pozostaje jeszcze wiele cykli do przelatania podczas gdy dla innych wiąże się z koniecznym remontem. Dodatkowo to podkreśla rysunek~\ref{fig:rul_vs_cycles}, gdzie RUL w funkcji cykli jest funkcją liniową malejącą o~tym samym współczynniku nachylenia lecz różnym współczynniku wolnym.
 
 \begin{figure}[H]
     \centering
@@ -144,6 +143,7 @@ Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla
 \begin{table}[H]
 \centering
 \caption{Metody podziału zbioru danych ze względu na wizyty w warsztacie}
+\label{tab:metody_podzialu}
 \begin{tabular}{p{2.5cm} p{3cm} p{3cm} p{7cm}}
 \hline
 \textbf{Metoda} & \textbf{Zbiór danych treningowych} & \textbf{Zbiór danych testowych} & \textbf{Hipoteza} \\
@@ -171,7 +171,7 @@ Do oceny predykcji modeli wykorzystano błąd średniokwadratowy
 % Requires: \usepackage{amsmath}
 \begin{equation}
     \mathrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{N} \lvert \hat{y}_i - y_i \rvert^{2}}{N}}
-    \label{eq:placeholder_label}
+    \label{eq:rmse}
 \end{equation}
 gdzie $\hat{y}$ to wartość przewidywana a $\mathrm{y}$ to wartość rzeczywista, N to liczba niebrakujących danych. RMSE został obliczony dla każdego silnika, a wyznaczona mediana i średnia arytmetyczna zostały wykorzystane do porównania modeli.
 We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso, ridge, en, huber, lassol, pa, sgd), których średni RMSE waha się między 3.02 – 3.94 w zależności od użytej metody. Na drugim miejscu plasują się modele nieliniowe (knn, cart, et, svmr, ada, bag, rf, gbm), których średni RMSE wynosi 3.17 – 4.07, a dla LSTM: 3.88 – 4.14. Średnie wartości RSTM zależą od użytej metody podziału na zbiór treningowy i testowy.
@@ -192,7 +192,7 @@ Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o 
 %Tablica podsumująca architektury neuronowych autoenkoderów
 \begin{table}[H]
 \centering
-\caption{Architektura liniowego autoenkodera}
+\caption{Architektura liniowych autoenkoderów}
 \label{tab:autoencoder_architecture}
 \begin{tabular}{lllll}
 \toprule
@@ -259,41 +259,41 @@ Na potrzebę niniejszej pracy stworzone zostały cztery modele autoenkoderów o 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Time_Comparison.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Wykres słupkowy porównujący czasy trenowania modeli neuronowych}
     \label{fig:neural_times}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Decoder_QNode.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Schemat kwantowego autoenkodera}
     \label{fig:quantum_decoder_graph}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Latent_State_QNode.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Schemat kwantowego autoenkodera - pomiar warstwy latentnej}
     \label{fig:quantum_latent_graph}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Trash_Zero_QNode.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Schemat kwantowego autoenkodera - pomiar warstwy śmieciowej}
     \label{fig:quantum_trash_graph}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Training_Loss_Comparison.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Wykres strat modelu kwantowego w funkcji epoki}
     \label{fig:quantum_loss_plot}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_vs_AE1_Histograms.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
+    \caption{Histogramy błędów rekonstrukcji dla modelu kwantowego oraz Autoenkodera 1  }
     \label{fig:quantum_vs_ae1}
 \end{figure}

@@ -83,7 +83,7 @@ gdzie:
     \item $K$ - liczba neuronów w warstwie ukrytej,
     \item $p$ - liczba wejść,
 \end{itemize}
-redukuje się do postaci liniowej względem wejść $X_j$. Oznacza to, że sieć neuronowa z liniową funkcją aktywacji nie jest w stanie modelować nieliniowych zależności między wejściami a wyjściami.\cite{islp}
+redukuje się do postaci liniowej względem wejść $X_j$. Oznacza to, że sieć neuronowa z liniową funkcją aktywacji nie jest w stanie modelować nieliniowych zależności między wejściami a~wyjściami.\cite{islp}
 
 Autorzy \cite{fa_survey} 
 proponują następującą klasyfikację funkcji aktywacji:
@@ -93,7 +93,7 @@ proponują następującą klasyfikację funkcji aktywacji:
             \item Funkcje aktywacji klasyczne. Powszechnie wykorzystywane w jednowarstwowych sieciach neuronowych. Nadają się do każdego zadanie przybliżania funkcji, pod warunkiem ciągłości i monotoniczności. W głębokich sieciach neuronowych ich implementacja jest niezalecana przez zjawisko zanikającego gradientu. Przykłady to:
                 \begin{itemize}
                     \item Idem \[id(a) = a\]
-                    \item Krokowa (Heavyside). Neuron wykorzystujący tę funkcję nazywany jest neuronem McCullocha-Pittsa. Jest to najprostsza funkcja aktywacji, która modeluje podstawowe zachowanie biologicznego neuronu. Jednakże jej zastosowanie w praktyce jest ograniczone ze względu na brak różniczkowalności w punkcie progowym, co utrudnia stosowanie metod gradientowych do trenowania sieci neuronowych. \cite{haykin2009neural}
+                    \item Krokowa (Heavyside). Neuron wykorzystujący tę funkcję nazywany jest neuronem McCullocha-Pittsa. Jest to najprostsza funkcja aktywacji, która modeluje podstawowe zachowanie biologicznego neuronu. Jednakże jej zastosowanie w~praktyce jest ograniczone ze względu na brak różniczkowalności w punkcie progowym, co utrudnia stosowanie metod gradientowych do trenowania sieci neuronowych. \cite{haykin2009neural}
                      \[Th_{\geq 0}(a) = \begin{cases}
                                                                 0, & a>0, \\
                                                                 1, & a \leq 0
@@ -141,12 +141,12 @@ proponują następującą klasyfikację funkcji aktywacji:
 
 Warstwa w sieci neuronowej to zbiór neuronów, które przetwarzają ten sam wektor sygnałów wejściowych (pochodzący z poprzedniej warstwy), lecz z użyciem różnych wag synaptycznych i wartości progowych. 
 Dla sieci neuronowych o jednym neuronie w każdej warstwie obserwuje się, że dodawanie kolejnych warstw nie zwiększa zdolności aproksymacyjnych, a w granicznym przypadku prowadzi do degeneracji wyjścia do funkcji stałej.
-Zarówno sieci płytkie (takie o jednej warstwie ukrytej) jak i głębokie mogą być uniwersalnymi aproksymatorami badanej funkcji, o ile mają odpowiednią szerokość (ilość neuronów w warstwie), w przeciwieństwie do sieci bez warstw ukrytych lub do sieci których szerokość (maksymalna ilość neuronów w każdej z warstw) wynosi 1.\cite{tutorial_nn_activation}
+Zarówno sieci płytkie (takie o~jednej warstwie ukrytej) jak i głębokie mogą być uniwersalnymi aproksymatorami badanej funkcji, o ile mają odpowiednią szerokość (ilość neuronów w warstwie), w przeciwieństwie do sieci bez warstw ukrytych lub do sieci których szerokość (maksymalna ilość neuronów w każdej z warstw) wynosi 1.\cite{tutorial_nn_activation}
 
 Jedna ukryta warstwa o odpowiedniej ilości neuronów jest w stanie przybliżyć większość funkcji, jednakże zwiększenie ilości warstw o rozsądnej szerokości znacząco ułatwia to zadanie. \cite{islp}
 
 Sieci o pojedynczych warstwach mają ograniczoną moc obliczeniową. Ograniczenie to jest możliwe do obejścia dodając głębokość lub szerokość.
-Dodawanie warstw ukrytych wiąże się z trudnością analizy teoretycznej modelu oraz wizualizację procesu uczenia.
+Dodawanie warstw ukrytych wiąże się z~trudnością analizy teoretycznej modelu oraz wizualizację procesu uczenia.
 Istnieją zasadniczo trzy rodzaje warstw:
 \begin{enumerate}
     \item Warstwa wejściowa, której zadaniem jest przekazanie wartości argumentów aproksymowanej funkcji do warstwy ukrytej. Nie wykonują obliczeń nieliniowych oraz nie mają wag uczonych w klasycznym sensie.
@@ -154,7 +154,7 @@ Istnieją zasadniczo trzy rodzaje warstw:
     \item Warstwa wyjściowa, ostatnia warstwa sieci, która przyjmuje jako argument wartość sygnału od ostatniej warstwy ukrytej i przekształca na wynik końcowy sieci.
 \end{enumerate}
 
-Neurony warstwy ukrytej działają jak detektory cech i odgrywają integralną rolę w modelach MPL (Multi Layer Perceptron). Z definicji warstwy wejściowej wynika, że neurony w warstwie ukrytej nie przyjmują wartości wejściowych z danych które mają zostać przybliżone. W trakcie uczenia warstwy ukryte „odkrywają” cechy charakteryzujące dane treningowe. Dzieje się to w wyniku nieliniowego przekształcenia na danych wejściowych do przestrzeni cech, dzięki której łatwiej zidentyfikować klasy czy prawidłowości, niż opierając się wyłącznie na analizie samych danych wejściowych. Obecność przestrzeni cech przede wszystkim różni MLP od Perceptronu Rosenblatta.
+Neurony warstwy ukrytej działają jak detektory cech i odgrywają integralną rolę w modelach MPL (Multi Layer Perceptron). Z definicji warstwy wejściowej wynika, że neurony w warstwie ukrytej nie przyjmują wartości wejściowych z danych które mają zostać przybliżone. W trakcie uczenia warstwy ukryte „odkrywają” cechy charakteryzujące dane treningowe. Dzieje się to w~wyniku nieliniowego przekształcenia na danych wejściowych do przestrzeni cech, dzięki której łatwiej zidentyfikować klasy czy prawidłowości, niż opierając się wyłącznie na analizie samych danych wejściowych. Obecność przestrzeni cech przede wszystkim różni MLP od Perceptronu Rosenblatta.
 
 \begin{tcolorbox}[title=Algorytm wstecznej propagacji błędu (ang. Backpropagation),
     colback=blue!5!white,colframe=blue!75!black,
@@ -188,10 +188,10 @@ Przy założeniu że użyta zostaje funkcja aktywacji sigmoidalna, algorytm wste
 
 \end{tcolorbox}
 
-\subsection{Autoenkodery}
+\subsection{Autoenkodery}\cite{deeplearningbook}
 Szczególnym przypadkiem sieci neuronowych są autoenkodery. Sieci te są wytrenowane, aby ich głównym zadaniem było kopiowanie danych z wejścia na wyjście. Autoenkodery znajdują także zastosowanie w odszumianiu danych oraz w wydobywaniu istotnych cech danych wejściowych. Autoenkodery to kombinacja funkcji enkodera $\mathbf{h} = f(\mathbf{x})$ i dekodera $\mathbf{r} = g(\mathbf{h})$. Enkoder wykonuje transformację wartości wejściowej na nowy format, a dekoder przyjmuje nowy format jako swoje wejście i przekształca, na format pierwotny.
 Trywialne rozwiązanie $g(f(\mathbf{x}))=\mathbf{x}$ nie ujawnia istotnej struktury danych. 
 Autoenkodery typu undercomplete to takie które zmniejszają wymiar danych po przejściu przez enkoder. Proces uczenia takich autoenkoderów polega na zadaniu optymalizacyjnym funkcji straty $L(\mathbf{x},g(f(\mathbf{x})))$, która penalizuje różnicę między wejściem enkodera a wyjściem dekodera. Autoenkoder o linowym dekoderze wykorzystujący błąd średniokwadratowy jako funkcję straty wykonuje te same zadania co PCA.
-Autorzy wskazują jednak, że jeżeli model ma zbyt dużą „zdolność” (ang. \textit{capacity}) (np. w wyniku wykorzystania nieliniowych enkoderów, czy zbyt skomplikowanej architektury sieci), to istnieje ryzyko, że model będzie jedynie kopiował dane bez uczenia się cech danych. Podobny problem występuje w modelach, w których enkoder mapuje dane wejściowe do wymiaru równego wymiarowi wejścia lub większego. Ryzyko to można zwalczać utrzymując nierozbudowaną architekturą sieci lub wprowadzając specjalną funkcję straty, która penalizuje za trywialne kopiowanie. 
+Autorzy \cite{deeplearningbook} wskazują jednak, że jeżeli model ma zbyt dużą „zdolność” (ang. \textit{capacity}) (np. w wyniku wykorzystania nieliniowych enkoderów, czy zbyt skomplikowanej architektury sieci), to istnieje ryzyko, że model będzie jedynie kopiował dane bez uczenia się cech danych. Podobny problem występuje w~modelach, w których enkoder mapuje dane wejściowe do wymiaru równego wymiarowi wejścia lub większego. Ryzyko to można zwalczać utrzymując nierozbudowaną architekturą sieci lub wprowadzając specjalną funkcję straty, która penalizuje za trywialne kopiowanie. 
 Przykładem jest sparse autoenkoder będący autoenkoderem regularyzowanym. 
 Różni się od undecomplete dodatkowym składnikiem funkcji straty, która oprócz kary za różnicę między wejściem a wyjściem penalizuje również za zbyt wiele aktywnych neuronów, innymi słowy, wprowadza karę za nadmierną aktywację neuronów w warstwie ukrytej, wymuszając rzadkość reprezentacji
