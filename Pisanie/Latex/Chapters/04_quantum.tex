@@ -90,15 +90,111 @@ gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem 
         \hline
     \end{tabular}
 }
-\caption{...}
-\label{tab:...}
+\caption{Przykładowe bramki kwantowe działające na pojedynczym qubicie.}
+\label{tab:bramki_kwantowe}
 \end{table}
 
 Szczególną własnością powyższych bramek jest:
 \[X^2 = Y^2 = Z^2 = S^4 = T^8 = I,\]
 
 \subsection{Obwód bramkowy zamiast warstw. Wymiana środka sieci na bramki}
+W architekturze głębokich sieci kwantowych jako analog perceptronu autorzy \cite{training_deep_quantum_nn} proponują dowolny unitarny operator z $m$ qubitami na wejściu i $n$ na wyjściu. Operator ten jest zależny od $(2^{m+n})^2-1$ parametrów. Qubity wejściowe są inicjalizowane nieznanym stanem $\rho^{in}$, a qubity wyjściowe czystym stanem $\ket{0...0}_{out}$. Dla uproszczenia przyjmuje się $n = 1$. Model można zapisać w następującej postaci:
+
+\begin{equation}\label{eq:stan_wyjscie_1}
+    \rho^{out} \equiv \operatorname{tr}_{in,hidden} \left[ U (\rho^{in} \otimes \ket{0...0}_{hidden,out}\bra{0...0}) U^{\dagger} \right],
+\end{equation}
+
+gdzie:
+\begin{itemize}
+    \item $\operatorname{tr}_{in,hidden}$ oznacza częściowy ślad po qubitach wejściowych i ukrytych.
+    \item $U \equiv U^{out}U^L U^{L-1} ... U^1$
+    \item $U^l$ jest iloczynem operatorów działających na warstwach l-1,l
+\end{itemize}
+
+Równoważnie można zapisać \ref{eq:stan_wyjscie_1} jako:
+
+\begin{equation}\label{eq:stan_wyjscie_2}
+    \rho^{out} \equiv \varepsilon^{out}(\varepsilon^L(...\varepsilon^2(\varepsilon^1(\rho^{in})))),
+\end{equation}
+
+gdzie:
+\begin{itemize}
+    \item $\varepsilon^l(X^{l-1}) = \operatorname{tr}_{l-1} \left(\prod_{j=m_l}^1 U_j^l (X^{l-1}\otimes\ket{0...0}_l\bra{0...0})\prod_{j=1}^{m_l}{U_j^l}^{\dagger}  \right)$
+    \item $m_l$ - liczba perceptronów działających na warstwach $l-1$ oraz $l$,
+    \item $j$ - indeks perceptronu w warstwie $l$,
+\end{itemize}
+
+Uczona jest relacja między stanami kwantowymi. Dane treningowe są w postaci par stanów kwantowych $(\ket{\phi_x^{in}},\ket{\phi_x^{out}})$, gdzie $x = 1,2,...,N$ to indeks przykładu treningowego z $N$ próbek. Rozpatrywany jest scenariusz, w którym $\ket{\phi_x^{out}}=V\ket{\phi_x^{in}}$, gdzie $V$ jest nieznanym unitarnym operatorem. 
+Wprowadzona funkcja kosztu ocenia zbieżność $\rho_x^{out}$ z $\ket{\phi_x^{out}}$:
+
+\begin{equation}\label{eq:f_kosztu}
+    C = \frac{1}{N} \sum_{x=1}^{N} \bra{\phi_x^{out}} \rho_x^{out} \ket{\phi_x^{out}},
+\end{equation}
+
+Jest to uogólniona funkcja ryzyka wykorzystywana w klasycznym uczeniu głębokich sieci kwantowych dla czystych stanów kwantowych. Przyjmuje ona wartości z przedziału [0,1], gdzie 1 oznacza idealne dopasowanie. 
+Sieć jest trenowana optymalizując funkcję kosztu \ref{eq:f_kosztu} poprzez dostosowanie parametrów bramek kwantowych w sieci na każdym kroku iteracyjnym. 
+\[U \rightarrow e^{i\epsilon K}U\]
+gdzie:
+\begin{itemize}
+    \item $K$ - macierz parametrów operatora unitarnego. Dobrane początkowo tak, aby $C$ rosło jak najszybciej,
+    \item $\epsilon$ - rozmiar kroku (ang. \textit{step size}).
+\end{itemize}
+do wyznaczenia $K$ wykorzystywane jest równanie:
+
+\begin{equation}\label{eq:delta_C}
+    \Delta C = \frac{\epsilon}{N}\sum_{x=1}^{N}\sum_{l=1}^{L+1}\operatorname{tr}(\sigma_x^l\Delta\varepsilon^l(\rho_x^{l-1}))
+\end{equation}
+
+gdzie:
+\begin{itemize}
+    \item $L+1$ - warstwa wyjściowa,
+    \item $\rho_x^{l-1}=\varepsilon^l(...\varepsilon^2(\varepsilon^1(\rho_x^{in})))$
+    \item $\sigma_x^l =\mathcal{F}^{l+1}(...\mathcal{F}^L(\mathcal{F}^{out}(\ket{\phi^{out}}\bra{\phi}^{out}))...) $
+    \item $\mathcal{F}(X) = \sum_{\alpha}A_{\alpha}^{\dagger}XA{\alpha}$ - sprzężny kanał kwantowy do $\varepsilon(X)=\sum_{\alpha}A_{\alpha}XA{\alpha}^{\dagger}$, czyli kanał przejścia z $l+1$ do $l$,
+\end{itemize}
+
+Własnością tej struktury sieci jest fakt, że dla wyznaczenia $K_j^l$ dla warstwy $l-1$ oraz $l$, potrzebne są jedynie informacje z tych dwóch warstw. Oznacza to, że aktualizacja parametrów może być wykonywana lokalnie dla każdej warstwy, bez konieczności propagacji wstecznej przez całą sieć, jak ma to miejsce w klasycznych sieciach neuronowych. $K$ zatem skaluje się z szerokością sieci a nie z jej głębokością, co jest korzystne z punktu widzenia efektywności obliczeniowej.
+
+Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosnącą przestrzeń Hilberta. Autorzy w tym podejściu dostrzegają kluczową zaletę jaką jest brak występowania tzw. zanikania gradientu (ang. \textit{barren plateau}) podczas trenowania sieci kwantowych, co jest powszechnym problemem w klasycznych sieciach neuronowych oraz innych architekturach QNN.
+
+\begin{tcolorbox}[title=Algorytm trenowania głębokiej sieci kwantowej,
+    colback=blue!5!white,colframe=blue!75!black,
+    breakable]
+    
+    \begin{enumerate}
+        \item \textbf{Inicjalizacja} Krok $s=0$. Losowo inicjalizowane są parametry bramek kwantowych w sieci.
+        \item \textbf{Feedforward} Dla każdej pary stanów treningowych $\ket{\phi_x^{in}},\ket{\phi_x^{out}}$ wykonaj:
+        \begin{enumerate}
+            \item Wyznacz \[\mathcal{T} =\rho_x^{l-1}(s)\otimes \ket{0...0}_l\bra{0...0} \]
+            \item Zastosuj operatory \[\mathcal{O} = \prod_{j=m_l}^{1}U_j^l(s)\mathcal{T}\prod_{j=1}^{l}{U_j^l(s)}^{\dagger} \]
+            \item Wyznacz ślad częściowy \[\rho_x^l(s) = \operatorname{tr}_{l-1}(\mathcal{O}) \]
+            \item Przechowaj $\rho_x^l(s)$ 
+        \end{enumerate}
+        Ten krok jest równoważny z wyznaczeniem $\rho_x^{out}(s)$ zgodnie z równaniem \ref{eq:stan_wyjscie_2}.
+        \item \textbf{Aktualizacja parametrów}
+        \begin{enumerate}
+            \item Oblicz funkcję kosztu $C(s)$ zgodnie z równaniem \ref{eq:f_kosztu}.
+            \item Wyznacz każdą macierz $K_j^l(s)$ 
+            \begin{equation}
+                K_j^l(s)=\eta \frac{2^{m_{l-1}}}{N}\sum_{x=1}^{N}\operatorname{tr}_{rest}M_j^l
+            \end{equation}
+            gdzie:
+            \begin{itemize}
+                \item $\eta$ - współczynnik uczenia,
+                \item $\operatorname{tr}_{rest}$ - ślad częściowy po wszystkich qubitach oprócz tych, na których działa $U_j^l$,
+                \item $M_j^l$ - komutator:
+                \[\left[\prod_{\alpha=j}^{1}U_{\alpha}^l(\mathcal{T})\prod_{\alpha=1}^{j}{U_{\alpha}^l}^{\dagger},
+                \prod_{\alpha=j+1}^{m_l}{U_{\alpha}^l}^{\dagger} (\mathbb{I}_{l-1}\otimes \sigma_x^l)\prod_{\alpha=m_l}^{j+1}U_{\alpha}^l\right]\]
+            \end{itemize}
+            \item \textbf{Aktualizacja operatorów unitarnych} Dla każdej warstwy l i każdego perceptronu j wykonaj:
+        \[U_j^l(s+1) = e^{i\epsilon K_j^l(s)}U_j^l(s)\]
+            \item Zwiększ krok $s = s + \epsilon$ 
+        \end{enumerate}
+        \item \textbf{Iteracja} Powtarzaj kroki 2 i 3 aż do osiągnięcia maksymalnej wartości funkcji kosztu.
+            
+    \end{enumerate}
+
+\end{tcolorbox}
 
 
-\subsection{Uczenie przez optymalizatory klasyczne}
 \subsection{Przykład prostego obwoduyu pennylane}
