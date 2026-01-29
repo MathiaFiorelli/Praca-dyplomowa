@@ -178,6 +178,7 @@ We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso
 W oparciu o model LSTM porównano również jakości predykcji dla różnych rodzajów podziałów dla trzech rodzin silników. Dwa na trzy rodziny najlepsze wyniki daje klasyczny podział Train-Test Split, natomiast w dla jednej rodziny podejście nr 1 zwyciężyło.
 
 \subsection{Część eksperymentalna}
+Obliczenia przeprowadzono na komputerze z procesorem Intel64 (Family 6, Model 140) oraz 16 GB pamięci RAM. Środowisko eksperymentalne obejmowało język Python oraz biblioteki PyTorch i PennyLane. Modele kwantowe były uruchamiane na symulatorze obwodów kwantowych działającym klasycznie.
 
 \subsubsection{Preprocessing danych}
 W ramach preprocessingu wykonano analizę korelacji i pogrupowano cechy zgodnie z opisem w \ref{section_eda}. Następnie wybrano 6 cech najbardziej skorelowanych z RUL (nie wliczając tej cechy) oraz przeprowadzono transformację Min - Max do zakresu [-1,1] na podstawie wzoru:
@@ -212,7 +213,10 @@ Oprócz penalizacji za niedokładne odwzorowanie model karze również za brak k
 Zaimplementowano algorytm zatrzymujący uczenie, jeśli w ciągu 30 kroków błąd nie poprawi się o 5e-4. Do optymalizacji błędu wykorzystano algorytm optymalizujący algorytm Adam (Adaptive Moment Estimation). 
 Rysunki \ref{fig:quantum_decoder_graph}, \ref{fig:quantum_latent_graph} oraz \ref{fig:quantum_trash_graph} przedstawiają schematy kwantowego autoenkodera.
 
-Po transformacji przez funkcję enkodującą dane zostały skompresowane do przestrzeni latentnej o wymiarze 2. Dane zostały zaprezentowane w tabelach (pierwsze 10 wierszy) \ref{tab:latent_neural} oraz \ref{tab:latent_quantum}, a także na wykresach \ref{fig:neural_latent_data} oraz \ref{fig:quantum_latent_data}. O ile wartości latentne dla autoenkodera neuronowego rozciągają się na szeroki zakres wartości, o tyle wartości latentne dla autoenkodera kwantowego mieszczą się w zakresie od 0.7 do 1.0 dla obu zmiennych latentnych. Wartości latentne dla autoenkodera kwantowego są dodatnie ze względu na sposób w jaki dane zostały zakodowane na qubitach poprzez rotację wokół osi Y. Wartości odpowiadają wartości oczekiwanej stanu qubitu po przejściu przez bramkę Pauli-Z, Innymi słowy prawdopodobieństwu znalezienia qubitu w stanie $\ket{0}$ po pomiarze. Im większa wartość tym większe prawdopodobieństwo. Wartości latentne dla autoenkodera neuronowego nie mają fizycznej interpretacji. 
+Po transformacji przez funkcję enkodującą dane zostały skompresowane do przestrzeni latentnej o wymiarze 2. Dane zostały zaprezentowane w tabelach (pierwsze 10 wierszy) \ref{tab:latent_neural} oraz \ref{tab:latent_quantum}, a także na wykresach \ref{fig:neural_latent_data} oraz \ref{fig:quantum_latent_data}. Wartości warstwy latentnej dla autoenkodera neuronowego mają zakres wartości od około $-0.4$ do $0.8$ - dla pierwszego wymiaru, oraz od $-12$ do $-1$ - dla drugiego wymiaru. Wartości w warstwie latentnej dla autoenkodera kwantowego mieszczą się w zakresie od 0.7 do 1.0 dla obu wymiarów. 
+
+Wyniki kwantowej funkcji enkodującej odpowiadają wartości oczekiwanej operatora Pauli-Z dla stanu kubitu po wykonaniu całego obwodu kwantowego. Zbiór wartości tej funkcji znajduje się w przedziale $[-1,1]$. Im wartość bliższa górnej granicy tym większe prawdopodobieństwo pomiaru qubitu w stanie $\ket{0}$, analogicznie - im bliższa dolnej granicy tym większe prawdopodobieństwo znalezienia się w stanie $\ket{1}$. 
+W przeciwieństwie do kwantowej warstwy latentnej, wartości latentne dla autoenkodera neuronowego nie mają fizycznej interpretacji. 
 
 \begin{table}[ht]
     \begin{minipage}[b]{0.48\textwidth}
@@ -232,16 +236,19 @@ Po transformacji przez funkcję enkodującą dane zostały skompresowane do prze
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Autoencoder_Latent_Space.png}
-    \caption{Wykres punktowy wartości warstwy latentnej autoenkodera neuronowego \#1}
-    \label{fig:neural_latent_data}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Latent_Space.png}
-    \caption{Wykres punktowy wartości warstwy latentnej autoenkodera kwantowego}
-    \label{fig:quantum_latent_data}
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Neural_Autoencoder_Latent_Space.png}
+        \caption{Wykres punktowy wartości warstwy latentnej autoenkodera neuronowego \#1}
+        \label{fig:neural_latent_data}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Latent_Space.png}
+        \caption{Wykres punktowy wartości warstwy latentnej autoenkodera kwantowego}
+        \label{fig:quantum_latent_data}
+    \end{minipage}
 \end{figure}
 
 
@@ -295,10 +302,11 @@ Po transformacji przez funkcję enkodującą dane zostały skompresowane do prze
 \end{tabular}
 \end{table}
 
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Autoencoder_Decoder_QNode.png}
-    \caption{Schemat kwantowego autoenkodera}
+    \caption{Schemat kwantowego autoenkodera - pomiar rekonstrukcji}
     \label{fig:quantum_decoder_graph}
 \end{figure}
 
@@ -316,31 +324,116 @@ Po transformacji przez funkcję enkodującą dane zostały skompresowane do prze
     \label{fig:quantum_trash_graph}
 \end{figure}
 
-\input{Output/Model_Analysis/reconstruction_full_summary}
+\subsubsection{Analiza procesu uczenia sieci i omówienie wyników}
+Do ogólnej oceny modeli wykorzystano następujące metryki:
+\begin{itemize}
+    \item RMSE (Root Mean Square Error) - błąd średniokwadratowy, określony wzorem \ref{eq:rmse},
+    \item Medianę błędu rekonstrukcji,
+    \item Q1 - pierwszy kwartyl błędu rekonstrukcji,
+    \item Q3 - trzeci kwartyl błędu rekonstrukcji,
+    \item IQR - rozstęp międzykwartylowy błędu rekonstrukcji,
+    \item Delta min - minimalny błąd rekonstrukcji,
+    \item Delta max - maksymalny błąd rekonstrukcji,
+    \item Outlier \% - procent wartości odstających, definiowanych jako wartości mniejsze niż Q1 - 1.5 * IQR lub większe niż Q3 + 1.5 * IQR,
+    \item Czas trenowania modelu w sekundach.
+    \item Liczba epok trenowania do osiągnięcia zbieżności.
+\end{itemize}
 
+
+Do wyznaczenia błędu średniokwadratowego rekonstrukcji dla tabeli \ref{tab:reconstruction_simple_summary} wykorzystano wszystkie pomiary bez podziału na cechy. Z ogólnego punktu widzenia wynika, że najlepszą jakość rekonstrukcji osiągnął Autoenkoder 1, z RMSE równym 0.2646, natomiast najgorszą model kwantowy z RMSE równym 0.5718. Pozostałe modele neuronowe nie odstawały znacząco od najlepszego wyniku. Ich błąd wynosił odpowiednio o około 0.02 i 0.1 więcej.\\
+Najkrótszy czas trenowania osiągnął Autoenkoder 2 z czasem poniżej 3 sekund, pozostałe modele neuronowe potrzebowały od 5 do 7 sekund. Model kwantowy wymagał aż 300 sekund na cały trening, ale w kontraście do modeli neuronowych do zbieżności doszedł po 35 epokach zamiast po 1000.\\
+Wyniki zostały podsumowane na wykresach \ref{fig:neural_time_bar} oraz \ref{fig:rmse_bar}. Dodatkowo na rysunkach \ref{fig:neural_loss_plot} oraz \ref{fig:quantum_loss_plot} przedstawiono proces uczenia się modeli neuronowych i kwantowego. W obu przypadkach widać szybki spadek wartości funkcji straty w pierwszych epokach, a następnie stabilizację.\\
+
+\begin{table}[H]
+\caption{Porównanie podstawowych metryk rekonstrukcji oraz czasu trenowania dla różnych modeli. Zielonym kolorem zaznaczono najlepsze wyniki, a czerwonym najgorsze w każdej kategorii.}
+\label{tab:reconstruction_simple_summary}
+\resizebox{\textwidth}{!}{
+\centering
 \input{Output/Model_Analysis/reconstruction_simple_summary}
+}
+\end{table}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Loss_Comparison.png}
-    \caption{Wykres porównawczy modeli neuronowych strat w funkcji epoki}
-    \label{fig:neural_loss}
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Summary Time Barplot.png}
+        \caption{Wykres słupkowy porównujący czasy trenowania modeli neuronowych. Celowo pominięto model kwantowy ze względu na znacznie dłuższy czas trenowania.}
+        \label{fig:neural_time_bar}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Summary RMSE Barplot.png}
+        \caption{Wykres słupkowy porównujący błąd średniokwadratowy rekonstrukcji modeli bez podziału na cechy.}
+        \label{fig:rmse_bar}
+    \end{minipage}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Neural_Network_Models_Training_Time_Comparison.png}
-    \caption{Wykres słupkowy porównujący czasy trenowania modeli neuronowych}
-    \label{fig:neural_times}
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Neural_Training_Loss_Comparison.png}
+        \caption{Wykres liniowy obrazujące proces uczenia: wartość funkcji straty w funkcji epoki. }
+        \label{fig:neural_loss_plot}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Output/Model_Analysis/Quantum_Training_Loss_Comparison.png}
+        \caption{Wykres słupkowy porównujący błąd średniokwadratowy rekonstrukcji modeli bez podziału na cechy.}
+        \label{fig:quantum_loss_plot}
+    \end{minipage}
 \end{figure}
 
+Tabela \ref{tab:reconstruction_full_summary} przedstawia porównanie jakości rekonstrukcji autoenkoderów z podziałem na cechy. Analiza wartości RMSE wskazuje, że najlepsze wyniki rekonstrukcji uzyskują modele klasyczne, w szczególności Autoencoder 2, który osiąga najniższe wartości błędu dla większości zmiennych (Operational setting 1, Ps30, phi, Nc). Autoencoder 1 również charakteryzuje się relatywnie niskim błędem, jednak wykazuje większą zmienność rozkładu błędów.
 
+Model kwantowy osiąga istotnie wyższe wartości RMSE we wszystkich analizowanych przypadkach, co wskazuje na gorszą zdolność rekonstrukcji sygnałów w porównaniu do podejść klasycznych. Różnica ta jest szczególnie widoczna dla zmiennych Ps30, P15 oraz Nc, gdzie błąd rekonstrukcji modelu kwantowego jest ponad dwukrotnie większy względem najlepszego modelu klasycznego. Warte zauważenia jest że dla zmiennych Operational setting 1/2 oraz phi, błędy rekonstrukcji są porówywalne z resztą (\ref{fig:rmse_heatmap}). 
+
+Analiza statystyk rozkładu błędów (mediana, kwartyle oraz IQR) pokazuje, że autoenkodery klasyczne generują rozkłady błędów symetryczne i skupione wokół zera, co świadczy o braku systematycznego obciążenia rekonstrukcji. W przeciwieństwie do tego, model kwantowy wykazuje wyraźne przesunięcia mediany, co sugeruje obecność systematycznego błędu rekonstrukcji.
+
+Dodatkowo, rozstęp międzykwartylowy (IQR) dla modelu kwantowego jest zazwyczaj większy niż dla modeli klasycznych, co wskazuje na niższą stabilność rekonstrukcji i większą wrażliwość na obserwacje odstające. Jest to potwierdzone również przez wartości ekstremalne (Delta min i Delta max), które w przypadku modelu kwantowego często przekraczają zakres obserwowany dla autoenkoderów klasycznych. Potiwerdza to również wykres pudełkowy błędów rekonstrukcji na rysunku \ref{fig:delta_boxplots}, gdzie model kwantowy wykazuje większą liczbę i rozpiętość wartości odstających.
+
+Warto zauważyć, że dla niektórych zmiennych (np. Operational setting 2, P15, phi) model kwantowy osiąga porównywalny poziom wartości odstających, jednak nie kompensuje to wyraźnie wyższych wartości RMSE oraz większej dyspersji błędów. Oznacza to, że nawet jeśli liczba ekstremalnych obserwacji nie jest znacząco większa, ogólna jakość rekonstrukcji pozostaje niższa.
+
+Podsumowując, uzyskane wyniki wskazują, że w analizowanym ustawieniu eksperymentalnym klasyczne autoenkodery wyraźnie przewyższają model kwantowy pod względem dokładności i stabilności rekonstrukcji. Model kwantowy, mimo poprawnej pracy i zachowania interpretowalnych wyjść opartych na wartościach oczekiwanych obserwowalnych, na obecnym etapie rozwoju nie dorównuje klasycznym metodom w zadaniu rekonstrukcji danych procesowych.
+
+Do podobnych wniosków można dojść analizując rozkłady błędów rekonstrukcji (\ref{fig:quantum_vs_ae1}) dla modelu kwantowego oraz klasycznego autoenkodera (Autoencoder 1) dla modelowanych zmiennych. Widoczna jest wyraźna różnica zarówno w położeniu, jak i kształcie rozkładów pomiędzy porównywanymi modelami.
+
+Dla zmiennych Operational setting 1, Ps30 oraz phi rozkłady obu modeli są zbliżone kształtem do rozkładu dzwonowego, jednak rozkład modelu kwantowego jest wyraźnie szerszy, co wskazuje na większą wariancję błędu rekonstrukcji. W wielu przypadkach obserwowane jest także przesunięcie środka rozkładu względem zera, co sugeruje obecność systematycznego obciążenia rekonstrukcji.
+
+Największe różnice widoczne są dla zmiennej P15, gdzie model kwantowy generuje silnie skoncentrowany rozkład w pobliżu wartości bliskich górnej granicy zakresu, podczas gdy autoencoder klasyczny skupia się w pobliżu zera. P15 jest nietypową relatywnie cechą, ponieważ posiada tylko dwa elementy w swoim zbiorze wartości. Jedna z wartości występuje nieporównywalnie częściej od drugiej. Zjawisko to jest spójne z wcześniej obserwowanymi wysokimi wartościami RMSE dla tej zmiennej.
+
+Dla zmiennej Nc rozkłady są wyraźnie rozdzielone — model kwantowy koncentruje błędy po stronie wartości ujemnych, natomiast autoencoder klasyczny wokół zera. Oznacza to występowanie systematycznego przesunięcia rekonstrukcji w modelu kwantowym.
+
+Najbardziej zbliżone rozkłady obserwowane są dla zmiennej phi, gdzie oba modele wykazują podobny zakres i kształt, choć nadal widoczna jest większa dyspersja po stronie modelu kwantowego.
+
+Sumarycznie histogramy potwierdzają wnioski z analizy metryk liczbowych:
+model klasyczny charakteryzuje się większą koncentracją błędów wokół zera i mniejszą wariancją, natomiast model kwantowy wykazuje większe rozproszenie, częstsze przesunięcia oraz efekty nasycenia, co przekłada się na gorszą jakość rekonstrukcji.
+
+
+\begin{table}[H]
+\caption{Porównanie metryk rekonstrukcji dla różnych modeli i ustawień operacyjnych. Zielonym kolorem zaznaczono najlepsze wyniki, a czerwonym najgorsze w każdej kategorii.}
+\label{tab:reconstruction_full_summary}
+\resizebox{\textwidth}{!}{
+\centering
+\input{Output/Model_Analysis/reconstruction_full_summary}
+}
+\end{table}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Quantum_Training_Loss_Comparison.png}
-    \caption{Wykres strat modelu kwantowego w funkcji epoki}
-    \label{fig:quantum_loss_plot}
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Delta Boxplots.png}
+    \caption{Wykresy pudełkowe błędów rekonstrukcji dla wszystkich modeli}
+    \label{fig:delta_boxplots}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Model_Analysis/Summary RMSE Heatmap.png}
+    \caption{Mapa cieplna błędu średniokwadratowego rekonstrukcji dla wszystkich modeli i cech}
+    \label{fig:rmse_heatmap}
 \end{figure}
 
 \begin{figure}[H]

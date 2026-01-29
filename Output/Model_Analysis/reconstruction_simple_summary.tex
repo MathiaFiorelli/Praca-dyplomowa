@@ -1,13 +1,42 @@
 \begin{table}[H]
-\resizebox{\textwidth}{!}{
-\centering
-\begin{tabular}{lrrrr}
- & \textbf{Autoencoder 1} & \textbf{Autoencoder 2} & \textbf{Autoencoder 3} & \textbf{Quantum} \\
-RMSE & {\cellcolor[HTML]{D1E7DD}} 0.2646 & 0.2828 & 0.3671 & {\cellcolor[HTML]{F8D7DA}} 0.5718 \\
-Training time (s) & 5.0523 & {\cellcolor[HTML]{D1E7DD}} 2.9898 & 7.5637 & {\cellcolor[HTML]{F8D7DA}} 300.5473 \\
-Epochs & {\cellcolor[HTML]{F8D7DA}} 1000.0000 & 1000.0000 & 1000.0000 & {\cellcolor[HTML]{D1E7DD}} 35.0000 \\
+\begin{tabular}{llrrrrrr}
+ &  & \textbf{\makecell{Operational\\setting 1}} & \textbf{\makecell{Operational\\setting 2}} & \textbf{Ps30} & \textbf{P15} & \textbf{phi} & \textbf{Nc} \\
+\textbf{Model} & \textbf{Metric} &  &  &  &  &  &  \\
+\cline{1-8}
+\multirow[c]{8}{*}{Autoencoder 1} & RMSE & 0.2486 & {\cellcolor[HTML]{D1E7DD}} 0.2902 & 0.2751 & {\cellcolor[HTML]{D1E7DD}} 0.2810 & 0.2750 & 0.2091 \\
+ & Median & 0.0022 & -0.0350 & -0.0131 & {\cellcolor[HTML]{D1E7DD}} 0.0072 & {\cellcolor[HTML]{D1E7DD}} 0.0128 & -0.0226 \\
+ & Q1 & -0.1659 & {\cellcolor[HTML]{D1E7DD}} -0.2286 & -0.1943 & {\cellcolor[HTML]{D1E7DD}} 0.0014 & -0.1822 & -0.1555 \\
+ & Q3 & 0.1693 & {\cellcolor[HTML]{D1E7DD}} 0.1621 & 0.1831 & {\cellcolor[HTML]{D1E7DD}} 0.0313 & 0.1932 & 0.1006 \\
+ & IQR & 0.3352 & {\cellcolor[HTML]{D1E7DD}} 0.3908 & 0.3773 & 0.0299 & 0.3754 & {\cellcolor[HTML]{F8D7DA}} 0.2561 \\
+ & Delta min & -0.9922 & {\cellcolor[HTML]{D1E7DD}} -0.8464 & -0.8201 & {\cellcolor[HTML]{F8D7DA}} -1.9999 & -1.0125 & -0.6522 \\
+ & Delta max & {\cellcolor[HTML]{D1E7DD}} 0.9861 & {\cellcolor[HTML]{F8D7DA}} 1.1732 & 1.0810 & {\cellcolor[HTML]{D1E7DD}} 0.1402 & 0.8213 & 1.4315 \\
+ & Outlier \% & 0.6253 & {\cellcolor[HTML]{F8D7DA}} 0.7707 & {\cellcolor[HTML]{D1E7DD}} 0.3587 & {\cellcolor[HTML]{F8D7DA}} 13.8917 & 0.5186 & {\cellcolor[HTML]{D1E7DD}} 2.3024 \\
+\cline{1-8}
+\multirow[c]{8}{*}{Autoencoder 2} & RMSE & {\cellcolor[HTML]{D1E7DD}} 0.2479 & 0.4600 & {\cellcolor[HTML]{D1E7DD}} 0.1760 & 0.3029 & {\cellcolor[HTML]{D1E7DD}} 0.2280 & {\cellcolor[HTML]{D1E7DD}} 0.1791 \\
+ & Median & 0.0135 & 0.0333 & {\cellcolor[HTML]{D1E7DD}} 0.0087 & 0.0288 & -0.0264 & {\cellcolor[HTML]{D1E7DD}} -0.0112 \\
+ & Q1 & {\cellcolor[HTML]{D1E7DD}} -0.1485 & -0.3580 & {\cellcolor[HTML]{D1E7DD}} -0.1088 & 0.0126 & -0.1812 & {\cellcolor[HTML]{D1E7DD}} -0.0980 \\
+ & Q3 & {\cellcolor[HTML]{F8D7DA}} 0.1819 & 0.4105 & 0.1308 & 0.0738 & {\cellcolor[HTML]{D1E7DD}} 0.1208 & 0.0744 \\
+ & IQR & {\cellcolor[HTML]{D1E7DD}} 0.3304 & 0.7685 & {\cellcolor[HTML]{D1E7DD}} 0.2396 & {\cellcolor[HTML]{F8D7DA}} 0.0612 & {\cellcolor[HTML]{D1E7DD}} 0.3020 & 0.1724 \\
+ & Delta min & {\cellcolor[HTML]{D1E7DD}} -0.9592 & -1.0525 & {\cellcolor[HTML]{D1E7DD}} -0.6214 & -1.9892 & {\cellcolor[HTML]{D1E7DD}} -0.9087 & -0.5757 \\
+ & Delta max & 1.1164 & 1.1544 & {\cellcolor[HTML]{D1E7DD}} 0.7394 & 0.4870 & {\cellcolor[HTML]{D1E7DD}} 0.7066 & 1.3050 \\
+ & Outlier \% & 0.7658 & {\cellcolor[HTML]{D1E7DD}} 0.0000 & 0.5526 & 13.5185 & {\cellcolor[HTML]{F8D7DA}} 0.8095 & 5.6662 \\
+\cline{1-8}
+\multirow[c]{8}{*}{Autoencoder 3} & RMSE & 0.2514 & 0.4884 & 0.3180 & 0.5166 & 0.3145 & 0.1995 \\
+ & Median & {\cellcolor[HTML]{D1E7DD}} 0.0010 & {\cellcolor[HTML]{D1E7DD}} -0.0039 & -0.0371 & 0.4749 & 0.0284 & -0.0639 \\
+ & Q1 & -0.1714 & -0.3373 & -0.2276 & 0.4749 & {\cellcolor[HTML]{F8D7DA}} -0.1934 & -0.1317 \\
+ & Q3 & 0.1734 & {\cellcolor[HTML]{F8D7DA}} 0.4961 & {\cellcolor[HTML]{F8D7DA}} 0.1891 & 0.4749 & 0.2288 & {\cellcolor[HTML]{D1E7DD}} 0.0148 \\
+ & IQR & 0.3448 & 0.8333 & 0.4167 & {\cellcolor[HTML]{D1E7DD}} 0.0000 & 0.4222 & {\cellcolor[HTML]{D1E7DD}} 0.1465 \\
+ & Delta min & -0.9990 & -1.0039 & -0.8228 & -1.5251 & {\cellcolor[HTML]{F8D7DA}} -1.1614 & {\cellcolor[HTML]{D1E7DD}} -0.4132 \\
+ & Delta max & 1.0010 & {\cellcolor[HTML]{D1E7DD}} 0.9961 & {\cellcolor[HTML]{F8D7DA}} 1.1772 & 0.4749 & 0.8386 & {\cellcolor[HTML]{F8D7DA}} 1.5868 \\
+ & Outlier \% & {\cellcolor[HTML]{D1E7DD}} 0.5089 & 0.0000 & 0.8095 & {\cellcolor[HTML]{D1E7DD}} 1.9679 & 0.7077 & 8.1770 \\
+\cline{1-8}
+\multirow[c]{8}{*}{Quantum} & RMSE & {\cellcolor[HTML]{F8D7DA}} 0.3638 & {\cellcolor[HTML]{F8D7DA}} 0.5798 & {\cellcolor[HTML]{F8D7DA}} 0.4118 & {\cellcolor[HTML]{F8D7DA}} 0.9172 & {\cellcolor[HTML]{F8D7DA}} 0.3310 & {\cellcolor[HTML]{F8D7DA}} 0.6106 \\
+ & Median & {\cellcolor[HTML]{F8D7DA}} -0.1673 & {\cellcolor[HTML]{F8D7DA}} -0.2577 & {\cellcolor[HTML]{F8D7DA}} -0.3000 & {\cellcolor[HTML]{F8D7DA}} 0.9187 & {\cellcolor[HTML]{F8D7DA}} 0.0964 & {\cellcolor[HTML]{F8D7DA}} -0.6207 \\
+ & Q1 & {\cellcolor[HTML]{F8D7DA}} -0.3853 & {\cellcolor[HTML]{F8D7DA}} -0.6558 & {\cellcolor[HTML]{F8D7DA}} -0.4929 & {\cellcolor[HTML]{F8D7DA}} 0.8922 & {\cellcolor[HTML]{D1E7DD}} -0.1313 & {\cellcolor[HTML]{F8D7DA}} -0.6883 \\
+ & Q3 & {\cellcolor[HTML]{D1E7DD}} 0.0366 & 0.2783 & {\cellcolor[HTML]{D1E7DD}} -0.0692 & {\cellcolor[HTML]{F8D7DA}} 0.9354 & {\cellcolor[HTML]{F8D7DA}} 0.3097 & {\cellcolor[HTML]{F8D7DA}} -0.5407 \\
+ & IQR & {\cellcolor[HTML]{F8D7DA}} 0.4219 & {\cellcolor[HTML]{F8D7DA}} 0.9342 & {\cellcolor[HTML]{F8D7DA}} 0.4237 & 0.0432 & {\cellcolor[HTML]{F8D7DA}} 0.4410 & 0.1476 \\
+ & Delta min & {\cellcolor[HTML]{F8D7DA}} -1.4009 & {\cellcolor[HTML]{F8D7DA}} -1.1531 & {\cellcolor[HTML]{F8D7DA}} -1.0242 & {\cellcolor[HTML]{D1E7DD}} -1.2046 & -1.0822 & {\cellcolor[HTML]{F8D7DA}} -0.9809 \\
+ & Delta max & {\cellcolor[HTML]{F8D7DA}} 1.2374 & 1.1731 & 0.9834 & {\cellcolor[HTML]{F8D7DA}} 0.9696 & {\cellcolor[HTML]{F8D7DA}} 0.9743 & {\cellcolor[HTML]{D1E7DD}} 1.0312 \\
+ & Outlier \% & {\cellcolor[HTML]{F8D7DA}} 0.9694 & 0.0000 & {\cellcolor[HTML]{F8D7DA}} 0.9209 & 2.2684 & {\cellcolor[HTML]{D1E7DD}} 0.4944 & {\cellcolor[HTML]{F8D7DA}} 8.2788 \\
 \end{tabular}
-}
-\caption{...}
-\label{tab:...}
 \end{table}
