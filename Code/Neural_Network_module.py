@@ -194,4 +194,5 @@ def analyze_model(model,df,num_epochs=1000):
         recon = model(tensor)
         mse_neural = torch.mean((recon - tensor) ** 2).item()
         mae_neural = torch.mean(torch.abs(recon - tensor)).item()
+
     return model, mse_neural, mae_neural, losses, end_neural_time
