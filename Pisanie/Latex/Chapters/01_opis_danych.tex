@@ -1,0 +1,17 @@
+\newpage
+\section*{Wprowadzenie}
+Celem badawczym jest uczenie nienadzorowane w postaci autoenkodera do kompresji i dekompresji danych prognostycznych turbowentylatorowych silników lotniczych. W pracy zostały wykorzystane dane z symulacji silników lotniczych C-MAPSS (ang. Commercial Modular Aero-Propulsion System Simulation) opracowanej przez NASA.
+Dane źródłowe pochodzą ze zbioru opublikowanego na konkursie podczas konferencji International Conference on Prognostics and Health Management (PHM08). Celem tego konkursu było wykorzystanie danych ze wskaźników do oszacowania pozostałych ilości cykli dla danej floty silników.  Dane te nie zostały zebrane poprzez odczyt wskaźników i fizycznie zamontowanych urządzeń pomiarowych, lecz w wyniku symulacji narzędzia C-MAPSS (Commercial Modular Aero-Propulsion System Simulation). C-MAPSS pozwala na symulację pracy silnika turbowentylatorowego klasy 90.000 lbf ciągu (tej samej klasy, które zasilają Boeing-777). Symulacja deterioracji silnika została oparta o dane wsadowe do symulacji narzędzia poprzez zmiany sprawności, przepływów itp. przez autorów. Dostęp do rzeczywistych danych - a nie symulowanych - nie jest możliwy ze wzgledu na wysokie koszty pozyskania połączone z ochroną konkurencyjności i praw własnościowych do danych. \cite{saxena2008damage}
+
+
+\input{Output/EDA/tab_parameters.tex}
+
+
+\begin{table}[H]
+\caption{Wynik klasteryzacji}
+\label{tab:clusters}
+\resizebox{\textwidth}{!}{
+\centering
+\input{Output/EDA/clusters.tex}
+}
+\end{table}
