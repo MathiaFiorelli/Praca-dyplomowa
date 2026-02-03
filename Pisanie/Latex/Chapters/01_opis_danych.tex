@@ -1,13 +1,43 @@
 \newpage
-\section*{Wprowadzenie}
-Celem badawczym jest uczenie nienadzorowane w postaci autoenkodera do kompresji i dekompresji danych prognostycznych turbowentylatorowych silników lotniczych. W pracy zostały wykorzystane dane z symulacji silników lotniczych C-MAPSS (ang. Commercial Modular Aero-Propulsion System Simulation) opracowanej przez NASA.
-Dane źródłowe pochodzą ze zbioru opublikowanego na konkursie podczas konferencji International Conference on Prognostics and Health Management (PHM08). Celem tego konkursu było wykorzystanie danych ze wskaźników do oszacowania pozostałych ilości cykli dla danej floty silników.  Dane te nie zostały zebrane poprzez odczyt wskaźników i fizycznie zamontowanych urządzeń pomiarowych, lecz w wyniku symulacji narzędzia C-MAPSS (Commercial Modular Aero-Propulsion System Simulation). C-MAPSS pozwala na symulację pracy silnika turbowentylatorowego klasy 90.000 lbf ciągu (tej samej klasy, które zasilają Boeing-777). Symulacja deterioracji silnika została oparta o dane wsadowe do symulacji narzędzia poprzez zmiany sprawności, przepływów itp. przez autorów. Dostęp do rzeczywistych danych - a nie symulowanych - nie jest możliwy ze wzgledu na wysokie koszty pozyskania połączone z ochroną konkurencyjności i praw własnościowych do danych. \cite{saxena2008damage}
+\section{Opis danych badawczych}
 
+Dane źródłowe pochodzą ze zbioru opublikowanego na konkursie podczas konferencji International Conference on Prognostics and Health Management (PHM08). Celem tego konkursu było wykorzystanie danych ze wskaźników do oszacowania pozostałych ilości cykli dla danej floty silników.  Dane te nie zostały zebrane poprzez odczyt wskaźników i fizycznie zamontowanych urządzeń pomiarowych, lecz w wyniku symulacji narzędzia C-MAPSS (Commercial Modular Aero-Propulsion System Simulation). C-MAPSS pozwala na symulację pracy silnika turbowentylatorowego klasy 90.000 lbf ciągu (tej samej klasy, które zasilają Boeing-777). Symulacja deterioracji silnika została oparta o dane wsadowe do symulacji narzędzia poprzez sterowanie zmianą sprawności, przepływów oraz innych parametrów silnika. Dostęp do rzeczywistych danych - a nie symulowanych - nie jest możliwy ze wzgledu na wysokie koszty pozyskania połączone z ochroną konkurencyjności i praw własnościowych do danych. \cite{saxena2008damage}
 
 \input{Output/EDA/tab_parameters.tex}
 
+\subsection{Wizualizacja danych (Exploratory Data Analysis)} \label{section_eda}
+Przeprowadzono kompleksową analizę danych począwszy od analizy rozkładu maksymalnego przeżycia dla każdego z silników. Rysunek~\ref{fig:hist_max_life} wskazuje na niesymetryczny rozkład maksymalnej ilości przelatanych cykli. Histogram gromadzi się głównie wokół wartości 200 cykli, chociaż wyjątkowo trwałe silniki o maksymalnym życiu większym niż 350 również znajdują się w~zbiorze danych.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/EDA/Histograms/Max Life_histogram.png}
+    \caption{Histogram Rozkładu Maksymalnej ilości cykli}
+    \label{fig:hist_max_life}
+\end{figure}
+Ze zbioru danych usunięto następujące kolumny, które były w całości puste, lub miały tylko jedną wartość.: Operational setting 3, T2, P2, epr, farB, $Nf_{dmd}$, $PCNfR_{dmd}$
+Elementy te są stałe ze względu na naturę symulacji: temperatura i ciśnienie na wlocie są stałe ponieważ symulowane są przeloty w atmosferze ISA (standardowe wartości parametrów otoczenia). Stosunek ciśnień (spręż) silnika jest również stały, ponieważ zmiany ciśnienia na wylocie turbiny są relatywnie małe. To samo się dotyczy wymaganych prędkości wentylatora oraz wydatku paliwa, ponieważ nie ma zmian obciążeń, nie ma potrzeby zian tych wartości.
+
+Obliczono RUL (ang. Remaining Useful Life), czyli pozostałą liczbę cykli do końca życia silnika i wykonano analizę korelacji Pearsona, otrzymując Rysunek~\ref{fig:pearson}.
+W oparciu o macierz korelacji stworzono dendrogram cech w celu ich zgrupowania \ref{fig:dendrogram}. 
+Przy progu odcięcia odległości korelacji równym 0.25 otrzymano grupy opisane w tabeli \ref{tab:clusters}
+Za pomocą pakietu XGBoost wykonana została analiza istotności cech (ang. \textit{Feature Importance}) otrzymując wykres \ref{fig:xgb_importance}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Pearson Correlation Heatmap.png}
+    \caption{Mapa cieplna korelacji Pearsona cech zbioru danych}
+    \label{fig:pearson}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Output/Dendrogram.png} 
+    \caption{Analiza klasteryzacji - dendrogram}
+    \label{fig:dendrogram}
+\end{figure}
 
 \begin{table}[H]
+\centering
 \caption{Wynik klasteryzacji}
 \label{tab:clusters}
 \resizebox{\textwidth}{!}{
@@ -15,3 +45,61 @@ Dane źródłowe pochodzą ze zbioru opublikowanego na konkursie podczas konfere
 \input{Output/EDA/clusters.tex}
 }
 \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/EDA/xgb_importance.png}
+    \caption{Istotność cech (Feature Importance) wyznaczona modelem XGBoost}
+    \label{fig:xgb_importance}
+\end{figure}
+
+Wykorzystane to zostanie dalej do zmniejszenia wymiarowości zbioru, zmniejszając tym samym czas potrzebny do uczenia sieci.
+W celu optymalizacji czasu trenowania sieci zmniejszono wymiarowość danych. Wybrano po jednej reprezentatywnej cesze dla każdej z grup za pomocą dendrogramu. Pierwotnym kryterium była korelacja z RUL. Otrzymano w ten sposób zestaw:
+\begin{verbatim}
+    Operational setting 1, Operational setting 2, Ps30, P15, phi, Nc
+\end{verbatim}
+
+Ps30, Nc oraz phi znajdują się z zbiorze sześciu najważniejszych cech ze względu na RUL wyłonionych w analizie XGBoost.
+
+Przeanalizowano rozkłady Operational setting 2 oraz P15 i usunięto je ze zbioru ponieważ uznano je za zmienne kategoryczne, a nie ciągłe w przeciwieństwie do pozostałych z zestawu. Po analizie macierzy korelacji wybrano T30 oraz W31 na ich zastępstwo, otrzymując następujący zestaw cech:
+\begin{verbatim}
+    Operational setting 1, T30, Ps30, W31, phi, Nc
+\end{verbatim}
+
+Z macierzy korelacji pearsona, w której znajdują się tylko wybrane cechy, wynika że na 15 możliwych par 6 z nich ma korelację powyżej (co do wartości bezwzględnej) powyżej 0.6 co może prowadzić do współliniowości.
+
+Powyższe cechy mają następujące znaczenie:
+\begin{itemize}
+    \item \textbf{Ps30} Istnotny wskaźnik sprawności sprężania - jednego z trzech etapów pracy silnika lotniczego. Jego spadek to sygnał zużycia łopatek lub nieszczelności. Jednostka to psia czyli funty na cal kwadratowy względem próżni - anglosaski odpowiednik Pascali
+    \item \textbf{T30} Przyrost temperatury może świadczyć o erozji łopatek, których spadek sprawnośći jest korygowany przez komputer pokładowy zwiększając prędkość obrotową silnika. Wyższa temperatura zwiększa też obciążenie cieplne całej konstrukcji. W skrócie jest to wskaźnik strat energii. Jednostka to stopnie Rankina - anglosaski odpowiednik stopni Celcjusza.
+    \item \textbf{Nc} Prędkość obrotowa głównego wału. Silnik musi „kręcić się szybciej”, by utrzymać ciąg przy postępującej degradacji.
+    \item \textbf{phi} Opisuje zapotrzebowanie silnika na paliwo w stosunku do wytwarzanego ciśnienia. Wskaźnik sprawności spalania.
+    \item \textbf{W31} Przepływ powietrza chłodzącego turbinę. Zmiany wskazują na degradację uszczelnień i upływy energii.
+    \item \textbf{Op. Set 1} Parametr zewnętrzny (nieopisany), który definiuje warunki brzegowe pracy wszystkich powyższych sensorów.
+\end{itemize}
+
+Wykonano wykresy czterech najbardziej skorelowanych cech z RUL w funkcji cykli. Kolory punktów odpowiadają ilości pozostałych cykli do przeżycia: im kolor ciemniejszy tym bliżej do remontu silnika. 
+
+W przypadku Ps30 (ciśnienie statyczne na wylocie turbiny wysokiego ciśnienia) ciśnienie na początku życia silników wynosi od około 47 do 47,75 psia i rośnie około 2\% do 48 - 48,5 psia. Wzrost ciśnienia statycznego wiąże się ze spowolnieniem przepływu powietrza w sprężarce co jest spójne z narracją postępującej eksploatacji i deterioracji komponentów silnika.
+
+Również T50 (temperatura całkowita na wylocie turbiny niskiego ciśnienia) rośnie wraz cyklami. Wraz ze spadkiem prędkości powietrza w sprężarkach, powietrze które jest wykorzystywane do chłodzenia komory spalania, w mniej skuteczny sposób odbiera ciepło. W innych modelach przewidywane jest, że temperatura będzie rosnąć w wyniku deterioracji turbiny, co przekłada się na gorsze odebranie energii, jednak w przypadku tego zestawu danych modelowany jest jedynie spadek sprawności sprężarki wysokiego ciśnienia. Zmiany temperatur wahają się od 1390 - 1420 do 1420 - 1440 (\~2\%)
+
+Stosunek wydatku paliwa do ciśnienia statycznego na wylocie Sprężarki Wysokiego Ciśnienia w funkcji przelatanych cykli jest funkcją malejącą, ponieważ wydatek paliwa jest stały a~ciśnienie statyczne rośnie. 
+
+Ciśnienie całkowite za sprężarką wysokiego ciśnienia maleje, ponieważ straty rosną w funkcji cykli.
+
+Warte uwagi jest zgodnie z przewidywaniami RUL w funkcji ilości przelatanych cykli jest funkcją malejącą, jednakże nie jest jednoznaczne dla jakich wartości cech silnik kończy życie. Na rysunku~\ref{fig:scatter} można wyróżnić obszary dla których w przypadku jednych silników pozostaje jeszcze wiele cykli do przelatania podczas gdy dla innych wiąże się z koniecznym remontem. Dodatkowo to podkreśla rysunek~\ref{fig:rul_vs_cycles}, gdzie RUL w funkcji cykli jest funkcją liniową malejącą o~tym samym współczynniku nachylenia lecz różnym współczynniku wolnym.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Scatterplots/RUL_vs_P30_scatterplot.png}
+    \caption{Wykresy punktowe dla 4 najbardziej skorelowanych cech z RUL}
+    \label{fig:scatter}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Output/Scatterplots/RUL_vs_cycles_scatterplot.png}
+    \caption{Wykres RUL w funkcji przelatanych cykli}
+    \label{fig:rul_vs_cycles}
+\end{figure}
