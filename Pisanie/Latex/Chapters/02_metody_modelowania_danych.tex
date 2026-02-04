@@ -125,3 +125,43 @@ Różni się od undecomplete dodatkowym składnikiem funkcji straty, która opr�
 Głębokie autoenkodery o strukturze hierarchicznie malejących warstw ukrytych (tzw. stacked autoencoders) wykazują się mniejszym błędem rekonstrukcji w porównaniu do klasycznej analizy składowych głównych (PCA) dla tej samej liczby wymiarów przestrzeni latentnej. Wskazano również na tendencję do tworzenia wyraźnie odseparowanych klastrów, co ułatwia jakościową interpretację w diagnostyce technicznej.
 
 Poza optymalizacją masową komponentów elektronicznych na pokładzie samolotów systemy pokładowe wykorzystujące dane o mniejszym wymiarze wymagają mniejszej ilości pamięci operacyjnej co skutkuje krótszym czasem wykonania (ang. runtime efficiency) zadań i obliczeń. To z kolei może umożliwić wykorzystanie nowoczesnych i tym samym bardziej skomplikowanych systemów pokładowych oferujących większe bezpieczeństwo operacyjne i komfort użytkowania.
+
+\subsection{Uczenie maszynowe w kontekście danych silnikowych}
+Artykuł \cite{rnn_rul} opisuje predykcję żywotności silników turbowentylatorowych poprzez wykorzystanie własnościowego oprogramowania trenującego opartego na wielowarstwowym perceptronie (Multi-Layer Perceptron Neural Network). Zbiór danych jest ten sam co opisany w \ref{sec:opis_danych}. Autor udowodnił sensowność badania poprzez klasyfikację silników na zdrowe/zużyte przy założeniu że pierwsze 30 cykli każdego silnika przedstawia dane typowe dla silników niewyeksploatowanych. Wspomniane oprogramowanie wykorzystuje Rozszerzony Filtr Kalmana (Extended Kalman Filter Training Method).Porównane zostały dwie architektury trójwarstwowa i dwuwarstwowa: pierwsza wykazała większą prędkość uczenia i dokładniejsze wyniki. Trening został przeprowadzony na systemie operacyjnym Windows XP, z procesorem Intel o taktowaniu 2GHz i osiągnięto 99,1\% dokładności klasyfikacji.\\
+Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla rodziny silników turbowentylatorowych. Zbiór danych pochodzi z rzeczywistych pomiarów istniejących maszyn. Zaproponowane zostały trzy rodzaje treningu w odróżnieniu od klasycznego podejścia podziału na zbiór treningowy i testowy. Wykorzystany model estymuje wartość temperatury gazu za turbiną podczas startu samolotu opierając się na założeniu że jest to najlepszy wskaźnik stanu silnika z racji na największe zapotrzebowanie na moc, duże wytężenie termiczne i ciśnieniowe modułu turbiny. Podział został wykonany w oparciu o informacje dotyczące wystąpienia wizyt w warsztatach. Autorzy zauważyli, że naprawa silników wiąże się z poprawą wartości predykatorów żywotności w związku z tym trzy rodzaje podziału zostały zaproponowane. Zbiór danych jest dzielony na tyle na N+1 segmentów, gdzie N to liczba wizyt w warsztatach.
+\begin{table}[H]
+\centering
+\caption{Metody podziału zbioru danych ze względu na wizyty w warsztacie}
+\label{tab:metody_podzialu}
+\begin{tabular}{p{2.5cm} p{3cm} p{3cm} p{7cm}}
+\hline
+\textbf{Metoda} & \textbf{Zbiór danych treningowych} & \textbf{Zbiór danych testowych} & \textbf{Hipoteza} \\
+\hline
+I (one-to-many) 
+& Tylko segment 1 
+& Tylko segment 2 
+& Segment 1 odpowiada sytuacji w której nowy silnik zużywa się. Jest to najbardziej reprezentacyjna próba degradacji silnika. \\
+\hline
+II (many-to-many) 
+& segment [1,N] 
+& segment N+1
+& Obraz pełnej sekwencji pogarszania się stanu dostarczy najwięcej informacji na ten temat zwiększając dokładność predykcji.\\
+\hline
+III (one-to-one) 
+& segment N--1 
+& segment N 
+& Tylko przedostatni segment obrazuje wiernie charakterystyki deterioracji.\\
+\hline
+\end{tabular}
+\end{table}
+
+Dodatkowo użyto dopasowanie wielomianowe (polynominal fitting) w celu odróżnienia sygnałów od trendów. Wykorzystano pierwszy segment (tj. od nowości do pierwszego remontu) każdego silnika do treningu, a do testów wykorzystano pozostały zbiór. Ze względu na trudność związaną z procesowaniem długim zbiorów czasowych przez klasyczne rekurencyjne sieci neuronowe (RNN) wykorzystano sieć LSTM (ang. Long Short-Term Memory - długa pamięć krótkotrwała). RNN posiada sieć porównywalną do łańcucha, LSTM natomiast posiada cztery sigmoidalne warstwy, które decydują o tym czy informacja zostanie zapomniana, przechowana czy podana dalej. 
+Do oceny predykcji modeli wykorzystano błąd średniokwadratowy
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    \mathrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{N} \lvert \hat{y}_i - y_i \rvert^{2}}{N}}
+    \label{eq:rmse}
+\end{equation}
+gdzie $\hat{y}$ to wartość przewidywana a $\mathrm{y}$ to wartość rzeczywista, N to liczba niebrakujących danych. RMSE został obliczony dla każdego silnika, a wyznaczona mediana i średnia arytmetyczna zostały wykorzystane do porównania modeli.
+We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso, ridge, en, huber, lassol, pa, sgd), których średni RMSE waha się między 3.02 – 3.94 w zależności od użytej metody. Na drugim miejscu plasują się modele nieliniowe (knn, cart, et, svmr, ada, bag, rf, gbm), których średni RMSE wynosi 3.17 – 4.07, a dla LSTM: 3.88 – 4.14. Średnie wartości RSTM zależą od użytej metody podziału na zbiór treningowy i testowy.
+W oparciu o model LSTM porównano również jakości predykcji dla różnych rodzajów podziałów dla trzech rodzin silników. Dwa na trzy rodziny najlepsze wyniki daje klasyczny podział Train-Test Split, natomiast w dla jednej rodziny podejście nr 1 zwyciężyło.
