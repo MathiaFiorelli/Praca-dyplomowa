@@ -1,28 +1,29 @@
 \newpage
 \section{Sieci Neuronowe}
 \subsection{Wprowadzenie}
-Za początek konceptu sztucznych sieci neuronowych można przyjąć 1943 rok, w którym to McCulloch i Pitts opierając się na działaniu komórki mózgowej - neuronie opisali model matematyczny który stał się podwalinami dzisiejszej sztucznej inteligencji. Komórka (dendryt) ta została przybliżona do matematycznego modelu będącym bramką logiczną. Dendryt integruje docierające do niego sygnały w swoim wnętrzu i generuje dalszy sygnał, jeżeli energia przychodzącego sygnału przekroczy graniczną wartość. \cite{raschka_python}
+
+Za początek konceptu sztucznych sieci neuronowych można przyjąć 1943 rok, w~którym to McCulloch i~Pitts opierając się na działaniu komórki mózgowej - neuronie opisali model matematyczny który stał się podwalinami dzisiejszej sztucznej inteligencji. Komórka (dendryt) ta została przybliżona do matematycznego modelu będącym bramką logiczną. Dendryt integruje docierające do niego sygnały w~swoim wnętrzu i~generuje dalszy sygnał, jeżeli energia przychodzącego sygnału przekroczy graniczną wartość. \cite{raschka_python}
 Neuron jest elementem procesującym informacje posiadający następujące cechy:\cite{haykin2009neural}
 
 \begin{itemize}
-    \item Neuron odbiera sygnały (informacje), tak jak jego biologiczny odpowiednik posiada synapsy, które charakteryzują wagi, które skalują odbierany sygnał. Wagi te w przypadku sztucznych neuronów mogą przybierać ujemne wagi.
-    \item Neuron przetwarza odebrany sygnał wykorzystując funkcję sumującą, która dokonuje liniowej kombinacji wag i sygnałów.
+    \item Neuron odbiera sygnały (informacje), tak jak jego biologiczny odpowiednik posiada synapsy, które charakteryzują wagi, które skalują odbierany sygnał. Wagi te w~przypadku sztucznych neuronów mogą przybierać ujemne wagi.
+    \item Neuron przetwarza odebrany sygnał wykorzystując funkcję sumującą, która dokonuje liniowej kombinacji wag i~sygnałów.
     \item Neuron wykorzystuje funkcję aktywacji do wyznaczenia ostatecznej wartości przekazywanego dalej sygnału. Sygnał również jest skalowany do odpowiednich zakresów.
 \end{itemize} 
     
-\textbf{Wielowarstwowe sieci neuronowe} (ang. Multi-Layer Perceptron – MLP) to zbiór sztucznych neuronów uporządkowanych w warstwach. Każda warstwa przetwarza dane i przekazuje je do kolejnej warstwy. Pierwsza warstwa to warstwa wejściowa, która posiada jedno wejście i przekazuje sygnał, ostatnia to warstwa wyjściowa, która może mieć więcej niż jedno wejście i wyjście, a pomiędzy nimi znajdują się warstwy ukryte. \cite{tutorial_nn_activation}
+\textbf{Wielowarstwowe sieci neuronowe} (ang. Multi-Layer Perceptron – MLP) to zbiór sztucznych neuronów uporządkowanych w~warstwach. Każda warstwa przetwarza dane i~przekazuje je do kolejnej warstwy. Pierwsza warstwa to warstwa wejściowa, która posiada jedno wejście i~przekazuje sygnał, ostatnia to warstwa wyjściowa, która może mieć więcej niż jedno wejście i~wyjście, a~pomiędzy nimi znajdują się warstwy ukryte. \cite{tutorial_nn_activation}
 
 \textbf{Perceptron Rosenblatta} Szczególnym typem sztucznego neuronu jest , powszechnie nazywany perceptronem, którego algorytm jest powszechnie używany po dziś dzień. Perceptron jest najprostszą wersją sieci neuronowej, którego zadaniem jest klasyfikacja wzorców będących liniowo rozdzielnymi (ang. Linearly separable), tzn. wzorce które leżą po przeciwnych stronach hiperpłaszczyzny. 
-Jest to pojedynczy neuron wraz z wagami na wejściu, w tym z wagą zerową (wyrazem wolnym). 
-Aby perceptron poprawnie klasyfikował, klasy muszą być liniowo rozdzielne. Co w przypadku zagadnienia dwuwymiarowego oznacza dwa obszary które można rozdzielić prostą.
-Ograniczenie to dyskwalifikuje użycie percpetronu Rosenblatta do analizy danych prognostycznych silników lotniczych ze względu na ich nieliniową złożoność, spowodowaną nieliniowymi procesami termodynamicznymi i aerodynamicznymi, co można zauważyć na rysunku \ref{fig:scatter}.
+Jest to pojedynczy neuron wraz z~wagami na wejściu, w~tym z~wagą zerową (wyrazem wolnym). 
+Aby perceptron poprawnie klasyfikował, klasy muszą być liniowo rozdzielne. Co w~przypadku zagadnienia dwuwymiarowego oznacza dwa obszary które można rozdzielić prostą.
+Ograniczenie to dyskwalifikuje użycie perceptronu Rosenblatta do analizy danych prognostycznych silników lotniczych ze względu na ich nieliniową złożoność, spowodowaną nieliniowymi procesami termodynamicznymi i~aerodynamicznymi, co można zauważyć na rysunku \ref{fig:scatter}.
 
 
-\textbf{Funkcja aktywacji} definiuje wartość sygnału wyjścia neuronu w funkcji liniowej kombinacji wejść i wag.
+\textbf{Funkcja aktywacji} definiuje wartość sygnału wyjścia neuronu w~funkcji liniowej kombinacji wejść i~wag.
 
-Funkcja aktywacji jest matematycznym modelem odwzorowującym sygnał wejściowy na sygnał wyjściowy neuronu. W przypadku perceptronu funkcją aktywacji jest funkcja skoku jednostkowego (ang. step function) lub funkcja signum. Funkcje aktywacji można podzielić na dwie kategorie: liniowe i nieliniowe. Funkcje liniowe są rzadko stosowane w praktyce, ponieważ sieci neuronowe z liniowymi funkcjami aktywacji mają ograniczoną zdolność do modelowania złożonych zależności. Nieliniowe funkcje aktywacji, takie jak sigmoidalna, ReLU (Rectified Linear Unit) czy tanh (hiperboliczna tangens), pozwalają sieciom neuronowym na modelowanie skomplikowanych wzorców i relacji w danych. Wybór odpowiedniej funkcji aktywacji ma kluczowe znaczenie dla efektywności uczenia się i ogólnej wydajności sieci neuronowej.\\
+Funkcja aktywacji jest matematycznym modelem odwzorowującym sygnał wejściowy na sygnał wyjściowy neuronu. W~przypadku perceptronu funkcją aktywacji jest funkcja skoku jednostkowego (ang. step function) lub funkcja signum. Funkcje aktywacji można podzielić na dwie kategorie: liniowe i~nieliniowe. Funkcje liniowe są rzadko stosowane w~praktyce, ponieważ sieci neuronowe z~liniowymi funkcjami aktywacji mają ograniczoną zdolność do modelowania złożonych zależności. Nieliniowe funkcje aktywacji, takie jak sigmoidalna, ReLU (Rectified Linear Unit) czy tanh (hiperboliczna tangens), pozwalają sieciom neuronowym na modelowanie skomplikowanych wzorców i~relacji w~danych. Wybór odpowiedniej funkcji aktywacji ma kluczowe znaczenie dla efektywności uczenia się i~ogólnej wydajności sieci neuronowej.\\
 
-Nieliniowość funkcji aktywacji sprawia, że sieć neuronowa sama staje się nieliniowym narzędziem aproksymacyjnym. W przypadku użycia liniowej funkcji aktywacji model sieci: 
+Nieliniowość funkcji aktywacji sprawia, że sieć neuronowa sama staje się nieliniowym narzędziem aproksymacyjnym. W~przypadku użycia liniowej funkcji aktywacji model sieci: 
 \[f(x)= \beta_0 +\sum_{k=1}^{K}{\beta_k g(w_{k0}+\sum_{j=1}^{p}{w_{kj}X_j})}\],
 gdzie: 
 \begin{itemize}
@@ -30,55 +31,55 @@ gdzie:
     \item $X_j$ - wejścia,
     \item $w_{kj}$ - wagi,
     \item $\beta_k$ - współczynniki liniowe,
-    \item $K$ - liczba neuronów w warstwie ukrytej,
+    \item $K$ - liczba neuronów w~warstwie ukrytej,
     \item $p$ - liczba wejść,
 \end{itemize}
-redukuje się do postaci liniowej względem wejść $X_j$. Oznacza to, że sieć neuronowa z liniową funkcją aktywacji nie jest w stanie modelować nieliniowych zależności między wejściami a~wyjściami.\cite{islp}
+redukuje się do postaci liniowej względem wejść $X_j$. Oznacza to, że sieć neuronowa z~liniową funkcją aktywacji nie jest w~stanie modelować nieliniowych zależności między wejściami a~wyjściami.\cite{islp}
 
 Autorzy \cite{fa_survey} 
 proponują następującą klasyfikację funkcji aktywacji:
 \begin{description}
-    \item [Funkcje aktywacji o ustalonym kształcie.] To zbiór funkcji aktywacji, które mają z góry określony kształt i nie zmieniają się podczas procesu uczenia. Zbiór ten dodatkowo dzielony na dwa podzbiory:
+    \item [Funkcje aktywacji o~ustalonym kształcie.] To zbiór funkcji aktywacji, które mają z~góry określony kształt i~nie zmieniają się podczas procesu uczenia. Zbiór ten dodatkowo dzielony na dwa podzbiory:
         \begin{itemize}
-            \item Funkcje aktywacji klasyczne. Powszechnie wykorzystywane w jednowarstwowych sieciach neuronowych. Nadają się do każdego zadanie przybliżania funkcji, pod warunkiem ciągłości i monotoniczności. W głębokich sieciach neuronowych ich implementacja jest niezalecana przez zjawisko zanikającego gradientu. Przykłady to:
+            \item Funkcje aktywacji klasyczne. Powszechnie wykorzystywane w~jednowarstwowych sieciach neuronowych. Nadają się do każdego zadanie przybliżania funkcji, pod warunkiem ciągłości i~monotoniczności. W~głębokich sieciach neuronowych ich implementacja jest niezalecana przez zjawisko zanikającego gradientu. Przykłady to:
                 \begin{itemize}
-                    \item Krokowa (Heavyside). Neuron wykorzystujący tę funkcję nazywany jest neuronem McCullocha-Pittsa. Jest to najprostsza funkcja aktywacji, która modeluje podstawowe zachowanie biologicznego neuronu. Jednakże jej zastosowanie w~praktyce jest ograniczone ze względu na brak różniczkowalności w punkcie progowym, co utrudnia stosowanie metod gradientowych do trenowania sieci neuronowych. \cite{haykin2009neural}
+                    \item Krokowa (Heavyside). Neuron wykorzystujący tę funkcję nazywany jest neuronem McCullocha-Pittsa. Jest to najprostsza funkcja aktywacji, która modeluje podstawowe zachowanie biologicznego neuronu. Jednakże jej zastosowanie w~praktyce jest ograniczone ze względu na brak różniczkowalności w~punkcie progowym, co utrudnia stosowanie metod gradientowych do trenowania sieci neuronowych. \cite{haykin2009neural}
                      \[Th_{\geq 0}(a) = \begin{cases}
                                                                 0, & a>0, \\
-                                                                1, & a \leq 0
+                                                                1, & a~\leq 0
                                                             \end{cases}
                                                             \]
 
                     
-                    \item Hiperboliczna tangens (tanh). Funkcja ta jest podobna do sigmoidalnej, ale jej wartości wyjściowe mieszczą się w zakresie od -1 do Funkcja tanh jest różniczkowalna i ma korzystne właściwości gradientowe, co czyni ją popularnym wyborem w sieciach neuronowych. Wykorzystano ją jako funkcję warstw wyjściowych aby przeskalować sygnały wyjściowe do zakresu [-1, 1], co ułatwia interpretację zrekonstruowanych parametrów fizycznych.
+                    \item Hiperboliczna tangens (tanh). Funkcja ta jest podobna do sigmoidalnej, ale jej wartości wyjściowe mieszczą się w~zakresie od -1 do 1. Funkcja tanh jest różniczkowalna i~ma korzystne właściwości gradientowe, co czyni ją popularnym wyborem w~sieciach neuronowych. Wykorzystano ją jako funkcję warstw wyjściowych aby przeskalować sygnały wyjściowe do zakresu [-1, 1], co ułatwia interpretację zrekonstruowanych parametrów fizycznych.
                     \[\tanh(a) = \frac{1-e^{-2a}}{1+e^{-2a}}\]
                 \end{itemize}
-            \item Rectified-based functions. Powszechnie używana rodzina funkcji do problemów uniwersalnej aproksymacji ze względu na swoją prostotę i efektywność obliczeniową. Są bardziej odpowiednie na zjawisko zanikającego gradientu. Przykłady to:
+            \item Rectified-based functions. Powszechnie używana rodzina funkcji do problemów uniwersalnej aproksymacji ze względu na swoją prostotę i~efektywność obliczeniową. Są bardziej odpowiednie na zjawisko zanikającego gradientu. Przykłady to:
                 \begin{itemize}
-                    \item ReLU (Rectified Linear Unit). Ułatwia tzw. rzadkie kodowanie (ang. \textit{sparse coding}), ze względu na niską ilość aktywowanych neuronów w sieci. Jej implementacja może prowadzić do zjawiska „martwych neuronów", gdzie wagi przestają się aktualizować, jeśli kombinacja liniowa wag i wejść jest zawsze ujemna. Nie jest różniczkowalna w punkcie zero co może powodować problemy podczas trenowania sieci neuronowej za pomocą metod gradientowych.
+                    \item ReLU (Rectified Linear Unit). Ułatwia tzw. rzadkie kodowanie (ang. \textit{sparse coding}), ze względu na niską ilość aktywowanych neuronów w~sieci. Jej implementacja może prowadzić do zjawiska „martwych neuronów", gdzie wagi przestają się aktualizować, jeśli kombinacja liniowa wag i~wejść jest zawsze ujemna. Nie jest różniczkowalna w~punkcie zero co może powodować problemy podczas trenowania sieci neuronowej za pomocą metod gradientowych.
                      \[ReLU(a) = \max(0, a)\]
-                     Została wykorzystana w warstwach ukrytych zaprojektowanych sieci ze względu na efektywność obliczeniową.
-                    \item Softplus. Gładkie przybliżenie funkcji ReLU, dzięki czemu jest różniczkowalna w całej swojej dziedzinie, szczególnie w punkcie zero. Dzięki temu umożliwia bardziej stabilne trenowanie sieci neuronowych za pomocą metod gradientowych. Teoretycznie zakłada lepsze zachowanie i łatwiejsze uczenie, jednak istnieją badania, które temu zaprzeczają, sugerując użycie ReLu dla uczenia pod nadzorem.
+                     Została wykorzystana w~warstwach ukrytych zaprojektowanych sieci ze względu na efektywność obliczeniową.
+                    \item Softplus. Gładkie przybliżenie funkcji ReLU, dzięki czemu jest różniczkowalna w~całej swojej dziedzinie, szczególnie w~punkcie zero. Dzięki temu umożliwia bardziej stabilne trenowanie sieci neuronowych za pomocą metod gradientowych. Teoretycznie zakłada lepsze zachowanie i~łatwiejsze uczenie, jednak istnieją badania, które temu zaprzeczają, sugerując użycie ReLu dla uczenia pod nadzorem.
                     \[Softplus(a) = \ln(1 + e^{a})\]
                 \end{itemize}
         \end{itemize}
-    \item [Funkcje aktywacji o zmiennym kształcie (ang \textit{Trainable shape}).] To zbiór funkcji aktywacji, których kształt jest uczony podczas procesu uczenia. Pozwala to na lepsze dopasowanie funkcji aktywacji do specyficznych cech danych i zadań, co może prowadzić do poprawy wydajności sieci neuronowej. Powstają w wyniku dodania dodatkowych parametrów do ww. funkcji lub tworząc dodatkowe sieci neuronowe jako odrębne funkcje aktywacji.
+    \item [Funkcje aktywacji o~zmiennym kształcie (ang \textit{Trainable shape}).] To zbiór funkcji aktywacji, których kształt jest uczony podczas procesu uczenia. Pozwala to na lepsze dopasowanie funkcji aktywacji do specyficznych cech danych i~zadań, co może prowadzić do poprawy wydajności sieci neuronowej. Powstają w~wyniku dodania dodatkowych parametrów do ww. funkcji lub tworząc dodatkowe sieci neuronowe jako odrębne funkcje aktywacji.
     \end{description}
 
-Do odzwierciedlenia nieliniowości zbioru danych poza użyciem nieliniowych funkcji aktywacji konieczne jest dodanie \textbf{warstw ukrytych} do sieci neuronowej. Aktualizacja wag poszczególnych neuronów występuje w wyniku algorytmu wstecznej propagacji opisanej poniżej.
-Warstwa w sieci neuronowej to zbiór neuronów, które przetwarzają ten sam wektor sygnałów wejściowych (pochodzący z poprzedniej warstwy), lecz z użyciem różnych wag synaptycznych i wartości progowych. 
-Dla sieci neuronowych o jednym neuronie w każdej warstwie obserwuje się, że dodawanie kolejnych warstw nie zwiększa zdolności aproksymacyjnych, a w granicznym przypadku prowadzi do degeneracji wyjścia do funkcji stałej.
-Zarówno sieci płytkie (takie o~jednej warstwie ukrytej) jak i głębokie mogą być uniwersalnymi aproksymatorami badanej funkcji, o ile mają odpowiednią szerokość (ilość neuronów w warstwie), w przeciwieństwie do sieci bez warstw ukrytych lub do sieci których szerokość (maksymalna ilość neuronów w każdej z warstw) wynosi 1.\cite{tutorial_nn_activation}
+Do odzwierciedlenia nieliniowości zbioru danych poza użyciem nieliniowych funkcji aktywacji konieczne jest dodanie \textbf{warstw ukrytych} do sieci neuronowej. Aktualizacja wag poszczególnych neuronów występuje w~wyniku algorytmu wstecznej propagacji opisanej poniżej.
+Warstwa w~sieci neuronowej to zbiór neuronów, które przetwarzają ten sam wektor sygnałów wejściowych (pochodzący z~poprzedniej warstwy), lecz z~użyciem różnych wag synaptycznych i~wartości progowych. 
+Dla sieci neuronowych o~jednym neuronie w~każdej warstwie obserwuje się, że dodawanie kolejnych warstw nie zwiększa zdolności aproksymacyjnych, a~w granicznym przypadku prowadzi do degeneracji wyjścia do funkcji stałej.
+Zarówno sieci płytkie (takie o~jednej warstwie ukrytej) jak i~głębokie mogą być uniwersalnymi aproksymatorami badanej funkcji, o~ile mają odpowiednią szerokość (ilość neuronów w~warstwie), w~przeciwieństwie do sieci bez warstw ukrytych lub do sieci których szerokość (maksymalna ilość neuronów w~każdej z~warstw) wynosi 1.\cite{tutorial_nn_activation}
 
-Jedna ukryta warstwa o odpowiedniej ilości neuronów jest w stanie przybliżyć większość funkcji, jednakże zwiększenie ilości warstw o rozsądnej szerokości znacząco ułatwia to zadanie. \cite{islp}
+Jedna ukryta warstwa o~odpowiedniej ilości neuronów jest w~stanie przybliżyć większość funkcji, jednakże zwiększenie ilości warstw o~rozsądnej szerokości znacząco ułatwia to zadanie. \cite{islp}
 
-Sieci o pojedynczych warstwach mają ograniczoną moc obliczeniową. Ograniczenie to jest możliwe do obejścia dodając głębokość lub szerokość.
+Sieci o~pojedynczych warstwach mają ograniczoną moc obliczeniową. Ograniczenie to jest możliwe do obejścia dodając głębokość lub szerokość.
 Dodawanie warstw ukrytych wiąże się z~trudnością analizy teoretycznej modelu oraz wizualizację procesu uczenia.
 Istnieją zasadniczo trzy rodzaje warstw:
 \begin{enumerate}
-    \item Warstwa wejściowa, której zadaniem jest przekazanie wartości argumentów aproksymowanej funkcji do warstwy ukrytej. Nie wykonują obliczeń nieliniowych oraz nie mają wag uczonych w klasycznym sensie.
-    \item Warstwa ukryta, która nazwę swoją zawdzięcza faktowi, że obliczenia nie są widoczne z perspektywy wejścia czy wyjścia. 
-    \item Warstwa wyjściowa, ostatnia warstwa sieci, która przyjmuje jako argument wartość sygnału od ostatniej warstwy ukrytej i przekształca na wynik końcowy sieci.
+    \item Warstwa wejściowa, której zadaniem jest przekazanie wartości argumentów aproksymowanej funkcji do warstwy ukrytej. Nie wykonują obliczeń nieliniowych oraz nie mają wag uczonych w~klasycznym sensie.
+    \item Warstwa ukryta, która nazwę swoją zawdzięcza faktowi, że obliczenia nie są widoczne z~perspektywy wejścia czy wyjścia. 
+    \item Warstwa wyjściowa, ostatnia warstwa sieci, która przyjmuje jako argument wartość sygnału od ostatniej warstwy ukrytej i~przekształca na wynik końcowy sieci.
 \end{enumerate}
 
 
@@ -88,50 +89,53 @@ Istnieją zasadniczo trzy rodzaje warstw:
     
 Przy założeniu że użyta zostaje funkcja aktywacji sigmoidalna, algorytm wstecznej propagacji błędu (ang. Backpropagation) można opisać następującymi krokami:\cite{haykin2009neural}
     \begin{enumerate}
-        \item \textbf{Inicjalizacja} Przy założeniu, że nie ma żadnych informacji dostępnych zakłada się wagi synaptyczne oraz wartości graniczne z rozkładu jednostajnego, którego średnia równa się zero. Wariancję rozkładu dobiera się w taki sposób by dla odchylenie standardowe lokalnego indukowanego pola znajdowało się pomiędzy częścią liniową a wysyconą funkcji sigmoidalnej.
-        \item \textbf{Przekazanie danych wejściowych} W epoce $n$ aplikowany jest przykład treningowy $\mathbf{x(n)}$ na warstwę wejściową, a wartość oczekiwana $\mathbf{d(n)}$ jest przechowana do późniejszego porównania z warstwą wyjściową.
-        \item \textbf{Obliczenia „w przód” (ang. \textit{forward computation})} Obliczone zostają indukowane lokalne pola dla każdej z warstw podając wyjście jednej warstwy jako wejście kolejnej. Wartość indukowanego pola dla neuronu j-tego z warstwy l-tej wyznacza się ze wzoru: 
+        \item \textbf{Inicjalizacja} Przy założeniu, że nie ma żadnych informacji dostępnych zakłada się wagi synaptyczne oraz wartości graniczne z~rozkładu jednostajnego, którego średnia równa się zero. Wariancję rozkładu dobiera się w~taki sposób by dla odchylenie standardowe lokalnego indukowanego pola znajdowało się pomiędzy częścią liniową a~wysyconą funkcji sigmoidalnej.
+        \item \textbf{Przekazanie danych wejściowych} W~epoce $n$ aplikowany jest przykład treningowy $\mathbf{x(n)}$ na warstwę wejściową, a~wartość oczekiwana $\mathbf{d(n)}$ jest przechowana do późniejszego porównania z~warstwą wyjściową.
+        \item \textbf{Obliczenia „w przód” (ang. \textit{forward computation})} Obliczone zostają indukowane lokalne pola dla każdej z~warstw podając wyjście jednej warstwy jako wejście kolejnej. Wartość indukowanego pola dla neuronu j-tego z~warstwy l-tej wyznacza się ze wzoru: 
         \[v_j^l(n)=\sum_i{w_{ji}^l(n)y_i^{l-1}(n)}\],
-        gdzie $w_{ji}^l(n)$ to waga synaptyczna łącząca neuron i-ty z warstwy (l-1)-tej z neuronem j-tym z warstwy l-tej, a $y_i^{l-1}(n)$ to wyjście neuronu i-tego z warstwy (l-1)-tej.
+        gdzie $w_{ji}^l(n)$ to waga synaptyczna łącząca neuron i-ty z~warstwy (l-1)-tej z~neuronem j-tym z~warstwy l-tej, a~$y_i^{l-1}(n)$ to wyjście neuronu i-tego z~warstwy (l-1)-tej.
         Celem tego kroku jest wyznaczenie błędu:
         \[e_j(n) = d_j(n) - y_j^L(n)\],
-        gdzie $y_j^L(n)$ to wyjście j-tego neuronu z warstwy wyjściowej L-tej.
+        gdzie $y_j^L(n)$ to wyjście j-tego neuronu z~warstwy wyjściowej L-tej.
         \item \textbf{Obliczenia wstecz (ang. \textit{backward computation})}
         Obliczone zostają lokalne gradienty: 
         \[
             \delta_j^l(n) =
             \begin{cases}
-            e_j^L(n)\,\phi'_j(v_j^l(n)) & \text{ dla neuronu } j \text{ w warstwie wyjściowej } L, \\
-            \phi'_j(v_j^l(n))\sum_k {\delta_k^{l+1}(n)w_{kj}^{l+1}(n)} & \text{ dla neuronu } j \text{ w warstwie ukrytej } l,
+            e_j^L(n)\,\phi'_j(v_j^l(n)) & \text{ dla neuronu } j~\text{ w~warstwie wyjściowej } L, \\
+            \phi'_j(v_j^l(n))\sum_k {\delta_k^{l+1}(n)w_{kj}^{l+1}(n)} & \text{ dla neuronu } j~\text{ w~warstwie ukrytej } l,
             \end{cases}
         \]
         Gdzie $\phi'_j(\cdot)$ to pochodna funkcji aktywacji neuronu j-tego.
         po wyznaczeniu lokalnych gradientów wykorzystuje się je do aktualizacji wag:
         \[w_{ji}^l(n+1)=w_{ji}^l(n) +\alpha\left[\Delta w_{ji}^l(n-1) \right] +\eta \delta_j^l(n)y_i^{l-1}(n) \]
-        Gdzie $\eta$ to współczynnik uczenia, a $\alpha$ to współczynnik momentu, a $\Delta w_{ji}^l(n) = \eta\delta_j(n)y_i(n)$ to zmiana wagi.
+        Gdzie $\eta$ to współczynnik uczenia, a~$\alpha$ to współczynnik momentu, a~$\Delta w_{ji}^l(n) = \eta\delta_j(n)y_i(n)$ to zmiana wagi.
         \item \textbf{Iteracja}Należy powtarzać kroki 3 oraz 4 wprowadzając kolejne przykłady, dopóki kryterium zatrzymania nie zostanie osiągnięty
     \end{enumerate}
 
 \end{tcolorbox}
 
 \subsection{Autoenkodery}\cite{deeplearningbook}
-Szczególnym przypadkiem sieci neuronowych są autoenkodery. Sieci te są wytrenowane, aby ich głównym zadaniem było kopiowanie danych z wejścia na wyjście. Autoenkodery znajdują także zastosowanie w odszumianiu danych oraz w wydobywaniu istotnych cech danych wejściowych. Autoenkodery to kombinacja funkcji enkodera $\mathbf{h} = f(\mathbf{x})$ i dekodera $\mathbf{r} = g(\mathbf{h})$. Enkoder wykonuje transformację wartości wejściowej na nowy format w tzw. przestrzeni latentnej (ukrytej), a dekoder przyjmuje nowy format jako swoje wejście i przekształca, na format pierwotny.
+
+Szczególnym przypadkiem sieci neuronowych są autoenkodery. Sieci te są wytrenowane, aby ich głównym zadaniem było kopiowanie danych z~wejścia na wyjście. Autoenkodery znajdują także zastosowanie w~odszumianiu danych oraz w~wydobywaniu istotnych cech danych wejściowych. Autoenkodery to kombinacja funkcji enkodera $\mathbf{h} = f(\mathbf{x})$ i~dekodera $\mathbf{r} = g(\mathbf{h})$. Enkoder wykonuje transformację wartości wejściowej na nowy format w~tzw. przestrzeni latentnej (ukrytej), a~dekoder przyjmuje nowy format jako swoje wejście i~przekształca, na format pierwotny.
 Trywialne rozwiązanie $g(f(\mathbf{x}))=\mathbf{x}$ nie ujawnia istotnej struktury danych. 
-Autoenkodery typu undercomplete to takie które zmniejszają wymiar danych po przejściu przez enkoder. Proces uczenia takich autoenkoderów polega na zadaniu optymalizacyjnym funkcji straty $L(\mathbf{x},g(f(\mathbf{x})))$, która penalizuje różnicę między wejściem enkodera a wyjściem dekodera. Autoenkoder o linowym dekoderze wykorzystujący błąd średniokwadratowy jako funkcję straty wykonuje te same zadania co PCA.
-Autorzy \cite{deeplearningbook} wskazują jednak, że jeżeli model ma zbyt dużą „zdolność” (ang. \textit{capacity}) (np. w wyniku wykorzystania nieliniowych enkoderów, czy zbyt skomplikowanej architektury sieci), to istnieje ryzyko, że model będzie jedynie kopiował dane bez uczenia się cech danych. Podobny problem występuje w~modelach, w których enkoder mapuje dane wejściowe do wymiaru równego wymiarowi wejścia lub większego. Ryzyko to można zwalczać utrzymując nierozbudowaną architekturą sieci lub wprowadzając specjalną funkcję straty, która penalizuje za trywialne kopiowanie. 
+Autoenkodery typu undercomplete to takie które zmniejszają wymiar danych po przejściu przez enkoder. Proces uczenia takich autoenkoderów polega na zadaniu optymalizacyjnym funkcji straty $L(\mathbf{x},g(f(\mathbf{x})))$, która penalizuje różnicę między wejściem enkodera a~wyjściem dekodera. Autoenkoder o~linowym dekoderze wykorzystujący błąd średniokwadratowy jako funkcję straty wykonuje te same zadania co PCA.
+Autorzy \cite{deeplearningbook} wskazują jednak, że jeżeli model ma zbyt dużą „zdolność” (ang. \textit{capacity}) (np. w~wyniku wykorzystania nieliniowych enkoderów, czy zbyt skomplikowanej architektury sieci), to istnieje ryzyko, że model będzie jedynie kopiował dane bez uczenia się cech danych. Podobny problem występuje w~modelach, w~których enkoder mapuje dane wejściowe do wymiaru równego wymiarowi wejścia lub większego. Ryzyko to można zwalczać utrzymując nierozbudowaną architekturą sieci lub wprowadzając specjalną funkcję straty, która penalizuje za trywialne kopiowanie. 
 Przykładem jest sparse autoenkoder będący autoenkoderem regularyzowanym. 
-Różni się od undecomplete dodatkowym składnikiem funkcji straty, która oprócz kary za różnicę między wejściem a wyjściem penalizuje również za zbyt wiele aktywnych neuronów, innymi słowy, wprowadza karę za nadmierną aktywację neuronów w warstwie ukrytej, wymuszając rzadkość reprezentacji
+Różni się od undecomplete dodatkowym składnikiem funkcji straty, która oprócz kary za różnicę między wejściem a~wyjściem penalizuje również za zbyt wiele aktywnych neuronów, innymi słowy, wprowadza karę za nadmierną aktywację neuronów w~warstwie ukrytej, wymuszając rzadkość reprezentacji
 
-Głębokie autoenkodery o strukturze hierarchicznie malejących warstw ukrytych (tzw. stacked autoencoders) wykazują się mniejszym błędem rekonstrukcji w porównaniu do klasycznej analizy składowych głównych (PCA) dla tej samej liczby wymiarów przestrzeni latentnej. Wskazano również na tendencję do tworzenia wyraźnie odseparowanych klastrów, co ułatwia jakościową interpretację w diagnostyce technicznej.
+Głębokie autoenkodery o~strukturze hierarchicznie malejących warstw ukrytych (tzw. stacked autoencoders) wykazują się mniejszym błędem rekonstrukcji w~porównaniu do klasycznej analizy składowych głównych (PCA) dla tej samej liczby wymiarów przestrzeni latentnej. Wskazano również na tendencję do tworzenia wyraźnie odseparowanych klastrów, co ułatwia jakościową interpretację w~diagnostyce technicznej.
 
-Poza optymalizacją masową komponentów elektronicznych na pokładzie samolotów systemy pokładowe wykorzystujące dane o mniejszym wymiarze wymagają mniejszej ilości pamięci operacyjnej co skutkuje krótszym czasem wykonania (ang. runtime efficiency) zadań i obliczeń. To z kolei może umożliwić wykorzystanie nowoczesnych i tym samym bardziej skomplikowanych systemów pokładowych oferujących większe bezpieczeństwo operacyjne i komfort użytkowania.
+Poza optymalizacją masową komponentów elektronicznych na pokładzie samolotów systemy pokładowe wykorzystujące dane o~mniejszym wymiarze wymagają mniejszej ilości pamięci operacyjnej co skutkuje krótszym czasem wykonania (ang. runtime efficiency) zadań i~obliczeń. To z~kolei może umożliwić wykorzystanie nowoczesnych i~tym samym bardziej skomplikowanych systemów pokładowych oferujących większe bezpieczeństwo operacyjne i~komfort użytkowania.
 
-\subsection{Uczenie maszynowe w kontekście danych silnikowych}
-Artykuł \cite{rnn_rul} opisuje predykcję żywotności silników turbowentylatorowych poprzez wykorzystanie własnościowego oprogramowania trenującego opartego na wielowarstwowym perceptronie (Multi-Layer Perceptron Neural Network). Zbiór danych jest ten sam co opisany w \ref{sec:opis_danych}. Autor udowodnił sensowność badania poprzez klasyfikację silników na zdrowe/zużyte przy założeniu że pierwsze 30 cykli każdego silnika przedstawia dane typowe dla silników niewyeksploatowanych. Wspomniane oprogramowanie wykorzystuje Rozszerzony Filtr Kalmana (Extended Kalman Filter Training Method).Porównane zostały dwie architektury trójwarstwowa i dwuwarstwowa: pierwsza wykazała większą prędkość uczenia i dokładniejsze wyniki. Trening został przeprowadzony na systemie operacyjnym Windows XP, z procesorem Intel o taktowaniu 2GHz i osiągnięto 99,1\% dokładności klasyfikacji.\\
-Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla rodziny silników turbowentylatorowych. Zbiór danych pochodzi z rzeczywistych pomiarów istniejących maszyn. Zaproponowane zostały trzy rodzaje treningu w odróżnieniu od klasycznego podejścia podziału na zbiór treningowy i testowy. Wykorzystany model estymuje wartość temperatury gazu za turbiną podczas startu samolotu opierając się na założeniu że jest to najlepszy wskaźnik stanu silnika z racji na największe zapotrzebowanie na moc, duże wytężenie termiczne i ciśnieniowe modułu turbiny. Podział został wykonany w oparciu o informacje dotyczące wystąpienia wizyt w warsztatach. Autorzy zauważyli, że naprawa silników wiąże się z poprawą wartości predykatorów żywotności w związku z tym trzy rodzaje podziału zostały zaproponowane. Zbiór danych jest dzielony na tyle na N+1 segmentów, gdzie N to liczba wizyt w warsztatach.
+\subsection{Uczenie maszynowe w~kontekście danych silnikowych}
+
+Artykuł \cite{rnn_rul} opisuje predykcję żywotności silników turbowentylatorowych poprzez wykorzystanie własnościowego oprogramowania trenującego opartego na wielowarstwowym perceptronie (Multi-Layer Perceptron Neural Network). Zbiór danych jest ten sam co opisany w~\ref{sec:opis_danych}. Autor udowodnił sensowność badania poprzez klasyfikację silników na zdrowe/zużyte przy założeniu że pierwsze 30 cykli każdego silnika przedstawia dane typowe dla silników niewyeksploatowanych. Wspomniane oprogramowanie wykorzystuje Rozszerzony Filtr Kalmana (Extended Kalman Filter Training Method).Porównane zostały dwie architektury trójwarstwowa i~dwuwarstwowa: pierwsza wykazała większą prędkość uczenia i~dokładniejsze wyniki. Trening został przeprowadzony na systemie operacyjnym Windows XP, z~procesorem Intel o~taktowaniu 2GHz i~osiągnięto 99,1\% dokładności klasyfikacji.
+
+Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla rodziny silników turbowentylatorowych. Zbiór danych pochodzi z~rzeczywistych pomiarów istniejących maszyn. Zaproponowane zostały trzy rodzaje treningu w~odróżnieniu od klasycznego podejścia podziału na zbiór treningowy i~testowy. Wykorzystany model estymuje wartość temperatury gazu za turbiną podczas startu samolotu opierając się na założeniu że jest to najlepszy wskaźnik stanu silnika z~racji na największe zapotrzebowanie na moc, duże wytężenie termiczne i~ciśnieniowe modułu turbiny. Podział został wykonany w~oparciu o~informacje dotyczące wystąpienia wizyt w~warsztatach. Autorzy zauważyli, że naprawa silników wiąże się z~poprawą wartości predykatorów żywotności w~związku z~tym trzy rodzaje podziału zostały zaproponowane. Zbiór danych jest dzielony na tyle na N+1 segmentów, gdzie N~to liczba wizyt w~warsztatach.
 \begin{table}[H]
 \centering
-\caption{Metody podziału zbioru danych ze względu na wizyty w warsztacie}
+\caption{Metody podziału zbioru danych ze względu na wizyty w~warsztacie}
 \label{tab:metody_podzialu}
 \begin{tabular}{p{2.5cm} p{3cm} p{3cm} p{7cm}}
 \hline
@@ -140,7 +144,7 @@ Autorzy \cite{framework_ml_health} opracowali strukturę prognozowania stanu dla
 I (one-to-many) 
 & Tylko segment 1 
 & Tylko segment 2 
-& Segment 1 odpowiada sytuacji w której nowy silnik zużywa się. Jest to najbardziej reprezentacyjna próba degradacji silnika. \\
+& Segment 1 odpowiada sytuacji w~której nowy silnik zużywa się. Jest to najbardziej reprezentacyjna próba degradacji silnika. \\
 \hline
 II (many-to-many) 
 & segment [1,N] 
@@ -149,19 +153,20 @@ II (many-to-many)
 \hline
 III (one-to-one) 
 & segment N--1 
-& segment N 
+& segment N~
 & Tylko przedostatni segment obrazuje wiernie charakterystyki deterioracji.\\
 \hline
 \end{tabular}
 \end{table}
 
-Dodatkowo użyto dopasowanie wielomianowe (polynominal fitting) w celu odróżnienia sygnałów od trendów. Wykorzystano pierwszy segment (tj. od nowości do pierwszego remontu) każdego silnika do treningu, a do testów wykorzystano pozostały zbiór. Ze względu na trudność związaną z procesowaniem długim zbiorów czasowych przez klasyczne rekurencyjne sieci neuronowe (RNN) wykorzystano sieć LSTM (ang. Long Short-Term Memory - długa pamięć krótkotrwała). RNN posiada sieć porównywalną do łańcucha, LSTM natomiast posiada cztery sigmoidalne warstwy, które decydują o tym czy informacja zostanie zapomniana, przechowana czy podana dalej. 
+Dodatkowo użyto dopasowanie wielomianowe (polynominal fitting) w~celu odróżnienia sygnałów od trendów. Wykorzystano pierwszy segment (tj. od nowości do pierwszego remontu) każdego silnika do treningu, a~do testów wykorzystano pozostały zbiór. Ze względu na trudność związaną z~procesowaniem długim zbiorów czasowych przez klasyczne rekurencyjne sieci neuronowe (RNN) wykorzystano sieć LSTM (ang. Long Short-Term Memory - długa pamięć krótkotrwała). RNN posiada sieć porównywalną do łańcucha, LSTM natomiast posiada cztery sigmoidalne warstwy, które decydują o~tym czy informacja zostanie zapomniana, przechowana czy podana dalej. 
 Do oceny predykcji modeli wykorzystano błąd średniokwadratowy
 % Requires: \usepackage{amsmath}
 \begin{equation}
     \mathrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{N} \lvert \hat{y}_i - y_i \rvert^{2}}{N}}
     \label{eq:rmse}
 \end{equation}
-gdzie $\hat{y}$ to wartość przewidywana a $\mathrm{y}$ to wartość rzeczywista, N to liczba niebrakujących danych. RMSE został obliczony dla każdego silnika, a wyznaczona mediana i średnia arytmetyczna zostały wykorzystane do porównania modeli.
-We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso, ridge, en, huber, lassol, pa, sgd), których średni RMSE waha się między 3.02 – 3.94 w zależności od użytej metody. Na drugim miejscu plasują się modele nieliniowe (knn, cart, et, svmr, ada, bag, rf, gbm), których średni RMSE wynosi 3.17 – 4.07, a dla LSTM: 3.88 – 4.14. Średnie wartości RSTM zależą od użytej metody podziału na zbiór treningowy i testowy.
-W oparciu o model LSTM porównano również jakości predykcji dla różnych rodzajów podziałów dla trzech rodzin silników. Dwa na trzy rodziny najlepsze wyniki daje klasyczny podział Train-Test Split, natomiast w dla jednej rodziny podejście nr 1 zwyciężyło.
+gdzie $\hat{y}$ to wartość przewidywana a~$\mathrm{y}$ to wartość rzeczywista, N~to liczba niebrakujących danych. RMSE został obliczony dla każdego silnika, a~wyznaczona mediana i~średnia arytmetyczna zostały wykorzystane do porównania modeli.
+We wszystkich podejściach podziału danych wygrywają modele liniowe (lr, lasso, ridge, en, huber, lassol, pa, sgd), których średni RMSE waha się między 3.02 – 3.94 w~zależności od użytej metody. Na drugim miejscu plasują się modele nieliniowe (knn, cart, et, svmr, ada, bag, rf, gbm), których średni RMSE wynosi 3.17 – 4.07, a~dla LSTM: 3.88 – 4.14. Średnie wartości RSTM zależą od użytej metody podziału na zbiór treningowy i~testowy.
+
+W oparciu o~model LSTM porównano również jakości predykcji dla różnych rodzajów podziałów dla trzech rodzin silników. Dwa na trzy rodziny najlepsze wyniki daje klasyczny podział Train-Test Split, natomiast w~dla jednej rodziny podejście nr 1 zwyciężyło.

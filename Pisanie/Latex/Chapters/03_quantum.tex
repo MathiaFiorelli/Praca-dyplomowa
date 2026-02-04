@@ -1,18 +1,20 @@
 \newpage
 \section{Sieci kwantowe}
-Obliczenia kwantowe oraz kwantowe przetwarzanie danych są relatywnie nowymi dyscyplinami, w których zasady fizyki kwantowej są wykorzystywane do przechowywanie i przetwarzania danych. \cite{Nakahara2013}
-Uczenie maszynowe przyczyniło się do rewolucyjnych zastosowań zarówno w społeczeństwie jak i w świecie nauki, jednakże wraz z ciągle słabnącym prawem Moore’a poszukiwane są nowe ścieżki celem podtrzymania dynamizmu rozwoju technologicznego. Jedną z tych ścieżek jest kwantowe uczenie maszynowe, które podąża za rozwojem pierwszych urządzeń kwantowych, których powstanie jest skutkiem próby ominięcia ograniczeń technologicznych i termodynamicznych klasycznej komputacji.\cite{training_deep_quantum_nn}
-O ile obecnie wykorzystywane technologie podlegają prawom fizyki kwantowej o tyle logika pracy opiera się na fizyce klasycznej. 
+
+Obliczenia kwantowe oraz kwantowe przetwarzanie danych są relatywnie nowymi dyscyplinami, w~których zasady fizyki kwantowej są wykorzystywane do przechowywanie i~przetwarzania danych. \cite{Nakahara2013}
+Uczenie maszynowe przyczyniło się do rewolucyjnych zastosowań zarówno w~społeczeństwie jak i~w świecie nauki, jednakże wraz z~ciągle słabnącym prawem Moore’a poszukiwane są nowe ścieżki celem podtrzymania dynamizmu rozwoju technologicznego. Jedną z~tych ścieżek jest kwantowe uczenie maszynowe, które podąża za rozwojem pierwszych urządzeń kwantowych, których powstanie jest skutkiem próby ominięcia ograniczeń technologicznych i~termodynamicznych klasycznej komputacji.\cite{training_deep_quantum_nn}
+O ile obecnie wykorzystywane technologie podlegają prawom fizyki kwantowej o~tyle logika pracy opiera się na fizyce klasycznej. 
 Obliczenia kwantowe zasadnicza różnią się dwoma kluczowymi aspektami:
 \begin{itemize}
-    \item Superpozycja stanu. Układ może znajdować się w dwóch stanach jednocześnie, dopóki nie zostanie wykonany jego pomiar.
-    \item Splątanie stanów. Pomiar jednego układu wpływa na stan innych z nim splątanych układów.
+    \item Superpozycja stanu. Układ może znajdować się w~dwóch stanach jednocześnie, dopóki nie zostanie wykonany jego pomiar.
+    \item Splątanie stanów. Pomiar jednego układu wpływa na stan innych z~nim splątanych układów.
 \end{itemize}
 
 Wykorzystanie kwantowego podejścia do opisu danych umożliwia znaczące przyspieszenie obliczeń oraz m.in. systemy kryptograficzne odporne na niektóre typy ataków. \cite{Nakahara2013}
 
-\subsection{Czym jest kubit?}\cite{quantum_intro}
-Qubit (ang. \textit{quantum bit}) jest podstawową jednostką informacji w obliczeniach kwantowych, odpowiednikiem bitu w obliczeniach klasycznych. W przeciwieństwie do bitu, który może przyjmować jedną z dwóch wartości (0 lub 1), kubit może znajdować się w stanie superpozycji obu tych wartości jednocześnie. Stany qubitu można zwizualizować na sferze Blocha (o promieniu równym 1) w układzie kartezjańskim. Zgodnie z konwencją: oś z jest skieroawana w górę a oś y w bok.
+\subsection{Czym jest qubit?}\cite{quantum_intro}
+
+Qubit (ang. \textit{quantum bit}) jest podstawową jednostką informacji w~obliczeniach kwantowych, odpowiednikiem bitu w~obliczeniach klasycznych. W~przeciwieństwie do bitu, który może przyjmować jedną z~dwóch wartości (0 lub 1), qubit może znajdować się w~stanie superpozycji obu tych wartości jednocześnie. Stany qubitu można zwizualizować na sferze Blocha (o promieniu równym 1) w~układzie kartezjańskim. Zgodnie z~konwencją: oś z~jest skierowana w~górę a~oś y~w~bok.
 Szczególnymi przypadkami stanów qubitu są:
 
 \begin{table}[H]
@@ -40,20 +42,20 @@ $\ket{-i}$ & $\frac{1}{\sqrt{2}} \left( \ket{0}-i\ket{1}\right)$ & (0, -1, 0) \\
     \begin{minipage}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{Figures/bloch_from_introduction_pg_76.png}
-        \caption{Sfera Blocha z zaznaczonymi podstawowymi stanami qubitów. \cite{quantum_intro}}
+        \caption{Sfera Blocha z~zaznaczonymi podstawowymi stanami qubitów. \cite{quantum_intro}}
         \label{fig:bloch_sphere}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{Figures/bloch_angles.png}
-    \caption{Sfera Blocha z kątami $\theta$ oraz $\phi$ \cite{quantum_intro}.}
+    \caption{Sfera Blocha z~kątami $\theta$ oraz $\phi$ \cite{quantum_intro}.}
     \label{fig:bloch_angles}
     \end{minipage}
 \end{figure}
 
 
-Interpetowalnym wynikiem pomiaru qubitu jest zawsze jedna z dwóch wartości: 0 lub 1. Prawdopodobieństwo uzyskania każdej z tych wartości zależy od stanu, w jakim znajduje się qubit przed pomiarem. Na przykład, jeśli qubit jest w stanie $\ket{+}$, to istnieje 50\% szans na uzyskanie wyniku 0 i 50\% szans na uzyskanie wyniku 1 podczas pomiaru.
+Interpetowalnym wynikiem pomiaru qubitu jest zawsze jedna z~dwóch wartości: 0 lub 1. Prawdopodobieństwo uzyskania każdej z~tych wartości zależy od stanu, w~jakim znajduje się qubit przed pomiarem. Na przykład, jeśli qubit jest w~stanie $\ket{+}$, to istnieje 50\% szans na uzyskanie wyniku 0 i~50\% szans na uzyskanie wyniku 1 podczas pomiaru.
 
 Prawdopodobieństwo wyznacza się ze wzoru:
 
@@ -65,24 +67,25 @@ P(1) = |\braket{1|\psi}|^2 = |\beta|^2,
 \end{equation}
 
 
-gdzie $\ket{\Psi}$, to stan kwantowy, $P(0)$ to prawdopodobieństwo uzyskania wyniku 0, a $P(1)$ to prawdopodobieństwo uzyskania wyniku 1. Wartości $\alpha$ i $\beta$ są amplitudami prawdopodobieństwa dla stanów $\ket{0}$ i $\ket{1}$ odpowiednio, przy czym muszą spełniać warunek normalizacji: $|\alpha|^2 + |\beta|^2 = 1$.
+gdzie $\ket{\Psi}$, to stan kwantowy, $P(0)$ to prawdopodobieństwo uzyskania wyniku 0, a~$P(1)$ to prawdopodobieństwo uzyskania wyniku 1. Wartości $\alpha$ i~$\beta$ są amplitudami prawdopodobieństwa dla stanów $\ket{0}$ i~$\ket{1}$ odpowiednio, przy czym muszą spełniać warunek normalizacji: $|\alpha|^2 + |\beta|^2 = 1$.
 
 Jednocześnie wzór \ref{eq:quantum_state} można wyrazić:
 \begin{equation}
     \ket{\psi} = \cos{\frac{\theta}{2}} \ket{0} + e^{i\phi}\sin{\frac{\theta}{2}} \ket{1}, \quad
 \end{equation}
 
-Gdzie $\theta$ to odległość zenitalna, czyli kąt czyli miara kąta między wektorem $\vec{OM}$ ($O$ - początek układu współrzędnych sfery Blocha, $M$ punkt na sferze Blocha) a dodatnią półosią $OZ$, natomiast $\phi$ to długość azymutalna, czyli miara kąta między rzutem prostokątnym wektora $\vec{OM}$ na płaszczyznę OXY a dodatnią półosią OX. (vide rys. \ref{fig:bloch_angles}). Właściwości tych miar kątowych uzasadniają skalowanie zbioru danych do zakresu $[-1,1]$, które umożliwia wprowadzenie danych diagnostycznych do stanu kwantowego jako kąty wyrażone w radianach.
+Gdzie $\theta$ to odległość zenitalna, czyli miara kąta między wektorem $\vec{OM}$ ($O$ - początek układu współrzędnych sfery Blocha, $M$ punkt na sferze Blocha) a~dodatnią półosią $OZ$, natomiast $\phi$ to długość azymutalna, czyli miara kąta między rzutem prostokątnym wektora $\vec{OM}$ na płaszczyznę OXY a~dodatnią półosią OX. (vide rys. \ref{fig:bloch_angles}). Właściwości tych miar kątowych uzasadniają skalowanie zbioru danych do zakresu $[-1,1]$, które umożliwia wprowadzenie danych diagnostycznych do stanu kwantowego jako kąty wyrażone w~radianach.
 
-Pomiary można wykonywać w różnych bazach (względem różnych osi na sferze Blocha), co pozwala na uzyskanie różnych informacji o stanie qubitu przed pomiarem.
+Pomiary można wykonywać w~różnych bazach (względem różnych osi na sferze Blocha), co pozwala na uzyskanie różnych informacji o~stanie qubitu przed pomiarem.
 
 \subsection{Bramki kwantowe}\cite{quantum_intro}
-Bramki kwantowe stanowią odpowiednik klasycznych bramek logicznych w obliczeniach kwantowych. Są transformacją, liniowym mapowaniem stanu qubitu w inne stany. Po przekształceniu całkowite prawdopodobieństwo stanu wciąż wynosi 1. W ujęciu algebry liniowej bramki kwantowe są macierzami. Poniższa tabela przedstawia wybrane bramki kwantowe wraz z ich działaniem na bazie, reprezentacją macierzową oraz interpretacją funkcjonalną.
+
+Bramki kwantowe stanowią odpowiednik klasycznych bramek logicznych w~obliczeniach kwantowych. Są transformacją, liniowym mapowaniem stanu qubitu w~inne stany. Po przekształceniu całkowite prawdopodobieństwo stanu wciąż wynosi 1. W~ujęciu algebry liniowej bramki kwantowe są macierzami. Poniższa tabela przedstawia wybrane bramki kwantowe wraz z~ich działaniem na bazie, reprezentacją macierzową oraz interpretacją funkcjonalną.
 Każda bramka kwantowa jest macierzą unitarną, co oznacza:
 \[
-U^{\dagger} U = U U^{\dagger} = I,
+U^{\dagger} U~= U~U^{\dagger} = I,
 \]
-gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem hermitowskim (transpozycja macierzy + sprzężenie), a $I$ jest macierzą jednostkową.
+gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem hermitowskim (transpozycja macierzy + sprzężenie), a~$I$ jest macierzą jednostkową.
 
 
 \begin{table}[H]
@@ -97,17 +100,17 @@ gdzie $U$ jest macierzą bramki kwantowej, $U^{\dagger}$ jest jej sprzężeniem 
         \hline
         Identity & $\begin{aligned} I\ket{0} &= \ket{0} \\ I\ket{1} &= \ket{1} \end{aligned}$ & $I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$ & Brak zmian (operacja neutralna). \\
         \hline
-        Pauli $X$ & $\begin{aligned} X\ket{0} &= \ket{1} \\ X\ket{1} &= \ket{0} \end{aligned}$ & $X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $x$. \\
+        Pauli $X$ & $\begin{aligned} X\ket{0} &= \ket{1} \\ X\ket{1} &= \ket{0} \end{aligned}$ & $X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ & Obrót o~$\pi$ wokół osi $x$. \\
         \hline
-        Pauli $Y$ & $\begin{aligned} Y\ket{0} &= i\ket{1} \\ Y\ket{1} &= -i\ket{0} \end{aligned}$ & $Y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $y$ \\
+        Pauli $Y$ & $\begin{aligned} Y\ket{0} &= i\ket{1} \\ Y\ket{1} &= -i\ket{0} \end{aligned}$ & $Y = \begin{pmatrix} 0 & -i \\ i~& 0 \end{pmatrix}$ & Obrót o~$\pi$ wokół osi $y$ \\
         \hline
-        Pauli $Z$ & $\begin{aligned} Z\ket{0} &= \ket{0} \\ Z\ket{1} &= -\ket{1} \end{aligned}$ & $Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$ & Obrót o $\pi$ wokół osi $z$. \\
+        Pauli $Z$ & $\begin{aligned} Z\ket{0} &= \ket{0} \\ Z\ket{1} &= -\ket{1} \end{aligned}$ & $Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$ & Obrót o~$\pi$ wokół osi $z$. \\
         \hline
-        Phase $S$ & $\begin{aligned} S\ket{0} &= \ket{0} \\ S\ket{1} &= i\ket{1} \end{aligned}$ & $S = \begin{pmatrix} 1 & 0 \\ 0 & i \end{pmatrix}$ & Obrót o $\frac{\pi}{2}$ wokół osi $z$. \\
+        Phase $S$ & $\begin{aligned} S\ket{0} &= \ket{0} \\ S\ket{1} &= i\ket{1} \end{aligned}$ & $S = \begin{pmatrix} 1 & 0 \\ 0 & i~\end{pmatrix}$ & Obrót o~$\frac{\pi}{2}$ wokół osi $z$. \\
         \hline
-        $T$ & $\begin{aligned} T\ket{0} &= \ket{0} \\ T\ket{1} &= e^{i\pi/4}\ket{1} \end{aligned}$ & $T = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{pmatrix}$ & Obrót o $\frac{\pi}{4}$ wokół osi $z$. \\
+        $T$ & $\begin{aligned} T\ket{0} &= \ket{0} \\ T\ket{1} &= e^{i\pi/4}\ket{1} \end{aligned}$ & $T = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{pmatrix}$ & Obrót o~$\frac{\pi}{4}$ wokół osi $z$. \\
         \hline
-        Hadamard $H$ & $\begin{aligned} H\ket{0} &= \frac{\ket{0} + \ket{1}}{\sqrt{2}} \\ H\ket{1} &= \frac{\ket{0} - \ket{1}}{\sqrt{2}} \end{aligned}$ & $H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$ & Obrót od $\pi$ jednocześnie wokół oś $x$ i $z$ \\
+        Hadamard $H$ & $\begin{aligned} H\ket{0} &= \frac{\ket{0} + \ket{1}}{\sqrt{2}} \\ H\ket{1} &= \frac{\ket{0} - \ket{1}}{\sqrt{2}} \end{aligned}$ & $H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$ & Obrót od $\pi$ jednocześnie wokół oś $x$ i~$z$ \\
         \hline
     \end{tabular}
 }
@@ -118,15 +121,16 @@ Szczególną własnością powyższych bramek jest:
 \[X^2 = Y^2 = Z^2 = S^4 = T^8 = I,\]
 
 \subsection{Architektura hybrydowych kwantowo-klasycznych sieci neuronowych}
-W architekturze głębokich sieci kwantowych jako analog perceptronu autorzy \cite{training_deep_quantum_nn} proponują dowolny unitarny operator z $m$ qubitami na wejściu i $n$ na wyjściu. Operator ten jest zależny od $(2^{m+n})^2-1$ parametrów. Qubity wejściowe są inicjalizowane nieznanym stanem $\rho^{in}$, a qubity wyjściowe czystym stanem $\ket{0...0}_{out}$. Dla uproszczenia przyjmuje się $n = 1$. Model można zapisać w następującej postaci:
+
+W architekturze głębokich sieci kwantowych jako analog perceptronu autorzy \cite{training_deep_quantum_nn} proponują dowolny unitarny operator z~$m$ qubitami na wejściu i~$n$ na wyjściu. Operator ten jest zależny od $(2^{m+n})^2-1$ parametrów. Qubity wejściowe są inicjalizowane nieznanym stanem $\rho^{in}$, a~qubity wyjściowe czystym stanem $\ket{0...0}_{out}$. Dla uproszczenia przyjmuje się $n = 1$. Model można zapisać w~następującej postaci:
 
 \begin{equation}\label{eq:stan_wyjscie_1}
-    \rho^{out} \equiv \operatorname{tr}_{in,hidden} \left[ U (\rho^{in} \otimes \ket{0...0}_{hidden,out}\bra{0...0}) U^{\dagger} \right],
+    \rho^{out} \equiv \operatorname{tr}_{in,hidden} \left[ U~(\rho^{in} \otimes \ket{0...0}_{hidden,out}\bra{0...0}) U^{\dagger} \right],
 \end{equation}
 
 gdzie:
 \begin{itemize}
-    \item $\operatorname{tr}_{in,hidden}$ oznacza częściowy ślad po qubitach wejściowych i ukrytych.
+    \item $\operatorname{tr}_{in,hidden}$ oznacza częściowy ślad po qubitach wejściowych i~ukrytych.
     \item $U \equiv U^{out}U^L U^{L-1} ... U^1$
     \item $U^l$ jest iloczynem operatorów działających na warstwach l-1,l
 \end{itemize}
@@ -141,18 +145,18 @@ gdzie:
 \begin{itemize}
     \item $\varepsilon^l(X^{l-1}) = \operatorname{tr}_{l-1} \left(\prod_{j=m_l}^1 U_j^l (X^{l-1}\otimes\ket{0...0}_l\bra{0...0})\prod_{j=1}^{m_l}{U_j^l}^{\dagger}  \right)$
     \item $m_l$ - liczba perceptronów działających na warstwach $l-1$ oraz $l$,
-    \item $j$ - indeks perceptronu w warstwie $l$,
+    \item $j$ - indeks perceptronu w~warstwie $l$,
 \end{itemize}
 
-Uczona jest relacja między stanami kwantowymi. Dane treningowe są w postaci par stanów kwantowych $(\ket{\phi_x^{in}},\ket{\phi_x^{out}})$, gdzie $x = 1,2,...,N$ to indeks przykładu treningowego z $N$ próbek. Rozpatrywany jest scenariusz, w którym $\ket{\phi_x^{out}}=V\ket{\phi_x^{in}}$, gdzie $V$ jest nieznanym unitarnym operatorem. 
-Wprowadzona funkcja kosztu ocenia zbieżność $\rho_x^{out}$ z $\ket{\phi_x^{out}}$:
+Uczona jest relacja między stanami kwantowymi. Dane treningowe są w~postaci par stanów kwantowych $(\ket{\phi_x^{in}},\ket{\phi_x^{out}})$, gdzie $x = 1,2,...,N$ to indeks przykładu treningowego z~$N$ próbek. Rozpatrywany jest scenariusz, w~którym $\ket{\phi_x^{out}}=V\ket{\phi_x^{in}}$, gdzie $V$ jest nieznanym unitarnym operatorem. 
+Wprowadzona funkcja kosztu ocenia zbieżność $\rho_x^{out}$ z~$\ket{\phi_x^{out}}$:
 
 \begin{equation}\label{eq:f_kosztu}
-    C = \frac{1}{N} \sum_{x=1}^{N} \bra{\phi_x^{out}} \rho_x^{out} \ket{\phi_x^{out}},
+    C~= \frac{1}{N} \sum_{x=1}^{N} \bra{\phi_x^{out}} \rho_x^{out} \ket{\phi_x^{out}},
 \end{equation}
 
-Jest to uogólniona funkcja ryzyka wykorzystywana w klasycznym uczeniu głębokich sieci kwantowych dla czystych stanów kwantowych. Przyjmuje ona wartości z przedziału [0,1], gdzie 1 oznacza idealne dopasowanie. 
-Sieć jest trenowana optymalizując funkcję kosztu \ref{eq:f_kosztu} poprzez dostosowanie parametrów bramek kwantowych w sieci na każdym kroku iteracyjnym. 
+Jest to uogólniona funkcja ryzyka wykorzystywana w~klasycznym uczeniu głębokich sieci kwantowych dla czystych stanów kwantowych. Przyjmuje ona wartości z~przedziału [0,1], gdzie 1 oznacza idealne dopasowanie. 
+Sieć jest trenowana optymalizując funkcję kosztu \ref{eq:f_kosztu} poprzez dostosowanie parametrów bramek kwantowych w~sieci na każdym kroku iteracyjnym. 
 \[U \rightarrow e^{i\epsilon K}U\]
 gdzie:
 \begin{itemize}
@@ -162,7 +166,7 @@ gdzie:
 do wyznaczenia $K$ wykorzystywane jest równanie:
 
 \begin{equation}\label{eq:delta_C}
-    \Delta C = \frac{\epsilon}{N}\sum_{x=1}^{N}\sum_{l=1}^{L+1}\operatorname{tr}(\sigma_x^l\Delta\varepsilon^l(\rho_x^{l-1}))
+    \Delta C~= \frac{\epsilon}{N}\sum_{x=1}^{N}\sum_{l=1}^{L+1}\operatorname{tr}(\sigma_x^l\Delta\varepsilon^l(\rho_x^{l-1}))
 \end{equation}
 
 gdzie:
@@ -170,19 +174,19 @@ gdzie:
     \item $L+1$ - warstwa wyjściowa,
     \item $\rho_x^{l-1}=\varepsilon^l(...\varepsilon^2(\varepsilon^1(\rho_x^{in})))$
     \item $\sigma_x^l =\mathcal{F}^{l+1}(...\mathcal{F}^L(\mathcal{F}^{out}(\ket{\phi^{out}}\bra{\phi}^{out}))...) $
-    \item $\mathcal{F}(X) = \sum_{\alpha}A_{\alpha}^{\dagger}XA{\alpha}$ - sprzężny kanał kwantowy do $\varepsilon(X)=\sum_{\alpha}A_{\alpha}XA{\alpha}^{\dagger}$, czyli kanał przejścia z $l+1$ do $l$,
+    \item $\mathcal{F}(X) = \sum_{\alpha}A_{\alpha}^{\dagger}XA{\alpha}$ - sprzężny kanał kwantowy do $\varepsilon(X)=\sum_{\alpha}A_{\alpha}XA{\alpha}^{\dagger}$, czyli kanał przejścia z~$l+1$ do $l$,
 \end{itemize}
 
-Własnością tej struktury sieci jest fakt, że dla wyznaczenia $K_j^l$ dla warstwy $l-1$ oraz $l$, potrzebne są jedynie informacje z tych dwóch warstw. Oznacza to, że aktualizacja lokalnych parametrów może być wykonywana lokalnie dla każdej warstwy, bez konieczności wyznaczania każdego z parametrów sieci, jak ma to miejsce w klasycznych sieciach neuronowych. $K$ zatem skaluje się z szerokością sieci a nie z jej głębokością, co jest korzystne z punktu widzenia efektywności obliczeniowej.
+Własnością tej struktury sieci jest fakt, że dla wyznaczenia $K_j^l$ dla warstwy $l-1$ oraz $l$, potrzebne są jedynie informacje z~tych dwóch warstw. Oznacza to, że aktualizacja lokalnych parametrów może być wykonywana lokalnie dla każdej warstwy, bez konieczności wyznaczania każdego z~parametrów sieci, jak ma to miejsce w~klasycznych sieciach neuronowych. $K$ zatem skaluje się z~szerokością sieci a~nie z~jej głębokością, co jest korzystne z~punktu widzenia efektywności obliczeniowej.
 
-Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosnącą przestrzeń Hilberta. Autorzy w tym podejściu dostrzegają kluczową zaletę ograniczenie występowania tzw. zanikania gradientu (ang. \textit{barren plateau}) podczas trenowania sieci kwantowych, co jest powszechnym problemem w klasycznych sieciach neuronowych oraz innych architekturach QNN.
+Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosnącą przestrzeń Hilberta. Autorzy w~tym podejściu dostrzegają kluczową zaletę ograniczenie występowania tzw. zanikania gradientu (ang. \textit{barren plateau}) podczas trenowania sieci kwantowych, co jest powszechnym problemem w~klasycznych sieciach neuronowych oraz innych architekturach QNN.
 
 \begin{tcolorbox}[title=Algorytm trenowania głębokiej sieci kwantowej,
     colback=blue!5!white,colframe=blue!75!black,
     breakable]
     
     \begin{enumerate}
-        \item \textbf{Inicjalizacja} Krok $s=0$. Losowo inicjalizowane są parametry bramek kwantowych w sieci.
+        \item \textbf{Inicjalizacja} Krok $s=0$. Losowo inicjalizowane są parametry bramek kwantowych w~sieci.
         \item \textbf{Feedforward} Dla każdej pary stanów treningowych $\ket{\phi_x^{in}},\ket{\phi_x^{out}}$ wykonane są następujące działania:
         \begin{enumerate}
             \item Wyznaczony zostaje stan: \[\mathcal{T} =\rho_x^{l-1}(s)\otimes \ket{0...0}_l\bra{0...0} \]
@@ -190,11 +194,11 @@ Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosną
             \item Wyznaczony zostaje ślad częściowy \[\rho_x^l(s) = \operatorname{tr}_{l-1}(\mathcal{O}) \]
             \item Przechowany zostaje stan $\rho_x^l(s)$ 
         \end{enumerate}
-        Ten krok jest równoważny z wyznaczeniem $\rho_x^{out}(s)$ zgodnie z równaniem \ref{eq:stan_wyjscie_2}.
+        Ten krok jest równoważny z~wyznaczeniem $\rho_x^{out}(s)$ zgodnie z~równaniem \ref{eq:stan_wyjscie_2}.
         \item \textbf{Aktualizacja parametrów}
         \begin{enumerate}
-            \item Oblicza się funkcję kosztu $C(s)$ zgodnie z równaniem \ref{eq:f_kosztu}.
-            \item Wyznacza się każdą macierz $K_j^l(s)$ dla każdej warstwy $l$ i każdego perceptronu $j$ w tej warstwie:
+            \item Oblicza się funkcję kosztu $C(s)$ zgodnie z~równaniem \ref{eq:f_kosztu}.
+            \item Wyznacza się każdą macierz $K_j^l(s)$ dla każdej warstwy $l$ i~każdego perceptronu $j$ w~tej warstwie:
             \begin{equation}
                 K_j^l(s)=\eta \frac{2^{m_{l-1}}}{N}\sum_{x=1}^{N}\operatorname{tr}_{rest}M_j^l
             \end{equation}
@@ -206,11 +210,11 @@ Ograniczeniem jest jednak ilość qubitów ze względu na ekspotencjalnie rosną
                 \[\left[\prod_{\alpha=j}^{1}U_{\alpha}^l(\mathcal{T})\prod_{\alpha=1}^{j}{U_{\alpha}^l}^{\dagger},
                 \prod_{\alpha=j+1}^{m_l}{U_{\alpha}^l}^{\dagger} (\mathbb{I}_{l-1}\otimes \sigma_x^l)\prod_{\alpha=m_l}^{j+1}U_{\alpha}^l\right]\]
             \end{itemize}
-            \item \textbf{Aktualizacja operatorów unitarnych} Dla każdej warstwy l i każdego perceptronu j wykonane zostają operacje unitarne:
+            \item \textbf{Aktualizacja operatorów unitarnych} Dla każdej warstwy l~i każdego perceptronu j~wykonane zostają operacje unitarne:
         \[U_j^l(s+1) = e^{i\epsilon K_j^l(s)}U_j^l(s)\]
-            \item Zwiększ krok $s = s + \epsilon$ 
+            \item Zwiększ krok $s = s~+ \epsilon$ 
         \end{enumerate}
-        \item \textbf{Iteracja} Kroki 2 i 3 są powtarzane aż do osiągnięcia maksymalnej wartości funkcji kosztu.
+        \item \textbf{Iteracja} Kroki 2 i~3 są powtarzane aż do osiągnięcia maksymalnej wartości funkcji kosztu.
             
     \end{enumerate}
 
