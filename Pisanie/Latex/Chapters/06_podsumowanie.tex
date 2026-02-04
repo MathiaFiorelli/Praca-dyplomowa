@@ -1,0 +1,18 @@
+\section{Podsumowanie}
+
+Celem niniejszej pracy było zbadanie zastosowania klasycznych i~kwantowych sztucznych sieci neuronowych w~kontekście prognostycznych danych lotniczych. Motywowane nieliniowymi powiązaniami termodynamicznymi i~aerodynamicznymi oraz zniekształconymi danymi w~wyniku zaszumienia a~także optymalizacją rozmiaru danych użyto autoenkoderów do zmniejszenia wymiarowości danych.
+
+Wykorzystane dane pochodzą ze zbioru opublikowanego na konkursie podczas konferencji International Conference on Prognostics and Health Management (PHM08). Zostały zasymulowane za pomocą narzędzia C-MAPSS i~tym samym nie pochodzą z~odczytu rzeczywistych wskaźników, ze względu na prawa własnościowe do danych. Dane przeskalowano do zakresu [-1,1] dla łatwiejszej obróbki.
+
+Utworzono 4 modele: 3 klasyczne sztuczne sieci neuronowe o~różnym skomplikowaniu sieci oraz jeden kwantowy. Zmierzono za pomocą pierwiastka błędu średniokwadratowego jakość rekonstrukcji oraz zwizualizowano warstwy latentne.
+Najlepszą jakość rekonstrukcji zaobserwowano dla autoenkodera implementującego klasyczną sieć neuronową o~najmniejszym stopniu skomplikowania architektury. Model kwantowy znacząco odstawał od reszty, jednak połowę cech zrekonstruował na podobnym poziomie. Poziom błędu dla każdych modeli przewyższał 0.15 co w~kontekście zbioru wartości jest wysoką wartością.
+
+Zbadano możliwości sieci neuronowych klasycznych i~kwantowych osiągając jednak niską jakość rekonstrukcji. Zmniejszono trzy oraz sześciokrotnie wymiar danych, oraz zauważono korelację między żywotnością silnika a~wartościami warstwy latentnej. Wskazuje to na potencjalne zastosowanie do skalowania danych oraz wykorzystania autoenkoderów do przewidywania żywotności silników turbowentylatorowych. 
+
+W celu polepszenia jakości rekonstrukcji rozważana jest eksploracja innych kształtów sieci klasycznych oraz rozdzielenie uczenia kwantowych enkoderów i~dekoderów. Interesującym kierunkiem dalszej eksploracji jest implementacja warstw latentnej do uczenia nowych modeli matematycznych do przewidywania żywotności.
+
+Zgodnie z~założeniami cytowanej literatury autoenkodery ze zbyt skomplikowaną siecią mają tendencję do gorszej jakości rekonstrukcji. Ze względu jednak na małą próbę badawczą modeli nie można jednoznacznie potwierdzić tego trendu. Nawiązując do analizowanej literatury oczekiwano od modelu kwantowego dużo lepszych wyników, a~na pewno nie gorszych od modeli klasycznych sieci neuronowych.
+
+Zauważono, że autoenkodery mają tendencję do słabej rekonstrukcji danych o~niskiej reprezentatywności, innymi słowy wartości których jest relatywnie mało – w~przeciwieństwie do wartości których jest najwięcej. Skutkowało to nagromadzeniem punktów rekonstrukcji w~miejscach oryginalnego zagęszczenia kosztem wartości odstających. Analiza wizualna tego zjawiska sugeruje proces filtracji szumów, który byłby pożądany, jako że sami autorzy zbioru danych potwierdzają istnienie szumu w~danych. Stanowi to obiecujący kierunek dla dalszych badań ilościowych nad czystością sygnału.
+
+Głównymi ograniczeniami pracy było wykorzystanie niepełnego zbioru danych ze względu na ograniczenia sprzętowe. Koszt obliczeniowy utworzonej sieci kwantowej był wysoki, co jest potwierdzone również w~cytowanej literaturze. Architektury sieci zostały dobrane metodą ekspercką, a~ich architektura nie podlegała procesowi optymalizacji.
